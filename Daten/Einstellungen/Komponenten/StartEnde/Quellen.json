@@ -1,0 +1,19 @@
+{
+  "Anfang_Übertragungsstart": "T_Übertragungsstart",
+  "Anfang_Starthinweise": "T_Starthinweise",
+  "Anfang_Beginn": "T_Beginn",
+  "Anfang_Gottesdienstart": "T_Gottesdienstart",
+  "Anfang_Wartemusik": "A_Wartemusik",
+  "Anfang_Warten": "V_Warten",
+  "Anfang_Datum": "T_Datum",
+  "Ende_Weitere_Hinweise": "T_Weitere_Hinweise",
+  "Ende_Übertragung_beendet": "T_Übertragung_beendet",
+  "Ende_Hintergrund": "G_Hintergrundbild_Normal",
+  "Sondereinblendung_Text": "T_Sondereinblendung",
+  "Sondereinblendung_Hintergrund": "G_Sondereinblendung",
+  "Livekamera": "K_Rechts",
+  "Liveton": [
+    "Mikro_Rechts",
+    "Mikro_Mitte"
+  ]
+}

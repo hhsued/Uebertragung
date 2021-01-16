@@ -1,0 +1,12 @@
+[
+  {
+    "Name": "Mitte",
+    "Hilfstext": "Mittige Kamera, auf den Amtsträger gerichtet",
+    "Quelle": "K_Mitte"
+  },
+  {
+    "Name": "Rechts",
+    "Hilfstext": "Kamera rechts mit einer breiteren Übersicht. Es werden die ersten drei Bänke des linken Blocks gezeigt und Teile vom Altar",
+    "Quelle": "K_Rechts"
+  }
+]

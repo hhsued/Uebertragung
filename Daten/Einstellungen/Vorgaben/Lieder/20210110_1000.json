@@ -1,0 +1,19 @@
+[
+  {
+    "Art": "Eingangslied",
+    "Lied": "1",
+    "Strophen": [
+      1,
+      2,
+      4
+    ]
+  },
+  {
+    "Art": "Bußlied",
+    "Lied": "100",
+    "Strophen": [
+      1,
+      2
+    ]
+  }
+]

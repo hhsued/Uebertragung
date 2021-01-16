@@ -1,0 +1,25 @@
+{
+  "Standard": {
+    "Szene": "S_Textwort",
+    "aktiv": {
+      "Kamera": "K_Mitte",
+      "Mikros": [
+        "Mikro_Audioanlage"
+      ],
+      "Quellen": [
+        "T_Textwort_Ort",
+        "T_Textwort_Verse",
+        "G_Bauchbinde",
+        "FQ_Hintergrund-Weiß"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Mitte",
+        "Mikro_Rechts"
+      ],
+      "Quellen": []
+    }
+  }
+}

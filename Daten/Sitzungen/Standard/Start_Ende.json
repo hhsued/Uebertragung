@@ -1,0 +1,16 @@
+{
+  "Art": "Gottesdienst",
+  "Hinweis": false,
+  "Hinweistext": "",
+  "Uhrzeit": false,
+  "Datum": true,
+  "Countdown": false,
+  "Countdown_Zielzeit": "",
+  "Startuhrzeit": false,
+  "Startzeit": "",
+  "Hinweis_Ende": false,
+  "Hinweis_Ende_Text": "",
+  "Sondereinblendung": false,
+  "Sondereinblendung_Intervall": 2,
+  "Sondereinblendung_Szene": ""
+}
