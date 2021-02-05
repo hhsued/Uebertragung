@@ -71,5 +71,29 @@
       ],
       "Quellen": []
     }
+  },
+  "Lied_Abendmahl": {
+    "Szene": "S_Strophe",
+    "aktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Audioanlage",
+        "Mikro_Rechts",
+        "Mikro_Mitte"
+      ],
+      "Quellen": [
+        "T_Lied-Titel",
+        "T_Lied-Nr",
+        "G_Abendmahl"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "K_Mitte",
+      "Mikros": [],
+      "Quellen": [
+        "FQ_Hintergrund-Weiß",
+        "T_Strophe"
+      ]
+    }
   }
 }

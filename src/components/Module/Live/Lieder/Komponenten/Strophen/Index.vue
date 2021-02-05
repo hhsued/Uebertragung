@@ -2,7 +2,7 @@
 <template lang="pug">
 q-card(style="min-width: 300px")
   q-card-section(style="padding-top: 5px; padding-bottom: 5px")
-    Werkzeugleiste(Titel="Strophen", Schliessen)
+    Werkzeugleiste(Titel="Strophen", @schliessen="$emit('verstecken')")
   q-separator
   q-card-section(style="padding-top: 5px; padding-bottom: 5px")
     Titel(:Nummer="Nummer", @speichern="on_speichern")
@@ -68,18 +68,29 @@ export default {
         const larrVorgabeStrophen = []
         const lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
         const larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
-
         if (this.$store.state.Lieder.Vorgabestrophen !== null) {
-          this.$store.state.Lieder.Vorgabestrophen.split(',').forEach(lstrStrophe => {
-            larrVorgabeStrophen.push(parseInt(lstrStrophe))
-          })
+          if (this.$store.state.Lieder.Vorgabestrophen.indexOf(',') > 0) {
+            this.$store.state.Lieder.Vorgabestrophen.split(',').forEach(lstrStrophe => {
+              larrVorgabeStrophen.push(parseInt(lstrStrophe))
+            })
+          } else {
+            if (typeof (this.$store.state.Lieder.Vorgabestrophen) === 'string' && this.$store.state.Lieder.Vorgabestrophen.length > 0) {
+              larrVorgabeStrophen.push(parseInt(this.$store.state.Lieder.Vorgabestrophen))
+            }
+          }
         }
         for (let lintZaehler = 0; lintZaehler < larrStophen.Strophen.length; lintZaehler++) {
           const larrDaten = {}
           const lstrText = larrStophen.Strophen[lintZaehler]
           this.$set(larrDaten, 'Text', lstrText)
-          if (larrVorgabeStrophen.indexOf((lintZaehler + 1)) >= 0) {
-            this.$set(larrDaten, 'Hintergrundfarbe', 'bg-green-2')
+          if (this.$store.state.Lieder.Vorgabestrophen !== null) {
+            if (larrVorgabeStrophen.length > 0) {
+              if (larrVorgabeStrophen.indexOf(lintZaehler + 1) > -1) {
+                this.$set(larrDaten, 'Hintergrundfarbe', 'bg-green-2')
+              }
+            } else {
+              this.$set(larrDaten, 'Hintergrundfarbe', 'bg-green-2')
+            }
           } else {
             this.$set(larrDaten, 'Hintergrundfarbe', 'bg-white')
           }

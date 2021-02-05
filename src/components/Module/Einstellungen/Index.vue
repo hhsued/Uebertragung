@@ -31,6 +31,11 @@
           Quellen
         q-tab-panel(name="Szenen")
           Szenen
+      q-checkbox(
+        label="Fehlersuche",
+        @click="on_Fehlersuche",
+        v-model="Fehlersuche"
+      )
 </template>
 <script>
 
@@ -44,11 +49,16 @@ export default {
   name: 'Einstellungen',
   components: { Basis, Mikrofone, Kameras, Perspektiven, Quellen, Szenen },
   data: () => ({
-    Registerkarten: 'Perspektiven'
+    Registerkarten: 'Perspektiven',
+    Fehlersuche: false
   }),
   mounted () {
+    this.Fehlersuche = this.$store.state.app.Fehlersuche
   },
   methods: {
+    on_Fehlersuche () {
+      this.$store.commit('app/setze', { Fehlersuche: this.Fehlersuche })
+    }
   }
 }
 </script>

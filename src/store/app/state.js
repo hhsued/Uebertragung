@@ -6,6 +6,7 @@ export default function () {
     Automatik: false,
     Übertragung_läuft: false,
     YouTubeID: null,
-    GitHub: null
+    GitHub: null,
+    Fehlersuche: false
   }
 }

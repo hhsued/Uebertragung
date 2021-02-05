@@ -74,7 +74,7 @@
                 )
                 q-select(
                   label="Quellen",
-                  v-model="Perspektiven[Perspektive].aktiv.Quellen",
+                  v-model="Perspektiven[Perspektive].inaktiv.Quellen",
                   use-input,
                   use-chips,
                   multiple,
@@ -114,7 +114,7 @@ export default {
     Quellen: null
   }),
   async mounted () {
-    this.Quellen = await this.$OBS.Quellen_laden()
+    this.Quellen = await this.$OBS.Quellen()
     this.Perspektiven = this.$E.Daten_laden(this.Komponente, 'Perspektiven')
   },
   methods: {

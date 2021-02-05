@@ -36,6 +36,9 @@ div
     :options="Komponenten"
   )
   component(:is="Komponente", @Automatik_neu="on_Automatik_neu")
+  div(v-if="$store.state.app.Fehlersuche")
+    .text-h6 Automatik-Plan
+    | {{ Planung }}
 </template>
 
 <script>
@@ -170,16 +173,41 @@ export default {
             this.Planungspruefung(larrZeitpunkt)
             this.Aufgabe_eintragen(larrZeitpunkt, Aufgabe)
           }
+        } else {
+          this.Planungspruefung(larrZeitpunkt)
+          this.Aufgabe_eintragen(larrZeitpunkt, Aufgabe)
         }
       }
     },
     Aufgabe_Countdown_aufbauen () {
-      const larrStarteit = this.Aufgabe_Zeit('Countdown', 'Startzeit')
+      const larrStartzeit = this.Aufgabe_Zeit('Countdown', 'Startzeit')
       const larrZielzeit = this.Aufgabe_Zeit('Countdown', 'Zielzeit')
-      for (let lintStunde = larrStarteit[0]; lintStunde <= larrZielzeit[0]; lintStunde++) {
-        for (let lintMinute = larrStarteit[1]; lintMinute <= larrZielzeit[1]; lintMinute++) {
-          this.Planungspruefung([lintStunde, lintMinute])
-          this.Aufgabe_eintragen([lintStunde, lintMinute], 'Countdown')
+      let lboolAufgabePlanen = true
+      if (larrStartzeit[0] > larrZielzeit[0]) {
+        this.$q.notify('Countdown: Die Startzeit ist größer als die Zielzeit -> Startzeit: ' + larrStartzeit + ', Zielzeit -> ' + larrZielzeit)
+        lboolAufgabePlanen = false
+      } else if (larrStartzeit[0] === larrZielzeit[0]) {
+        if (larrStartzeit[1] > larrZielzeit[1]) {
+          this.$q.notify('Countdown: Die Startzeit ist größer als die Zielzeit -> Startzeit: ' + larrStartzeit + ', Zielzeit -> ' + larrZielzeit)
+          lboolAufgabePlanen = false
+        }
+      }
+
+      if (lboolAufgabePlanen) {
+        for (let lintStunde = larrStartzeit[0]; lintStunde <= larrZielzeit[0]; lintStunde++) {
+          if (lintStunde === larrZielzeit[0]) {
+            for (let lintMinute = larrStartzeit[1]; lintMinute <= larrZielzeit[1]; lintMinute++) {
+              this.Planungspruefung([lintStunde, lintMinute])
+              this.Aufgabe_eintragen([lintStunde, lintMinute], 'Countdown')
+            }
+          }
+          if (lintStunde < larrZielzeit[0]) {
+            for (let lintMinute = larrStartzeit[1]; lintMinute <= 59; lintMinute++) {
+              this.Planungspruefung([lintStunde, lintMinute])
+              this.Aufgabe_eintragen([lintStunde, lintMinute], 'Countdown')
+            }
+            larrStartzeit[1] = 0
+          }
         }
       }
     },
@@ -200,27 +228,43 @@ export default {
       return NaechsteAktion
     },
     Aufgabe_Sondereinblendung_aufbauen () {
-      const larrStarteit = this.Aufgabe_Zeit('Sondereinblendung', 'Startzeit')
+      const larrStartzeit = this.Aufgabe_Zeit('Sondereinblendung', 'Startzeit')
       const larrZielzeit = this.Aufgabe_Zeit('Sondereinblendung', 'Endzeit')
-      let larrNaechsteAktion = [larrStarteit[0], larrStarteit[1]]
+      let larrNaechsteAktion = [larrStartzeit[0], larrStartzeit[1]]
       let lboolSondereinblendungSichtbar = false
 
-      this.Planungspruefung(larrStarteit)
-      this.Aufgabe_eintragen(larrStarteit, 'Sondereinblendung')
+      this.Planungspruefung(larrStartzeit)
+      this.Aufgabe_eintragen(larrStartzeit, 'Sondereinblendung')
       lboolSondereinblendungSichtbar = true
       larrNaechsteAktion = this.Aufgabe_Sondereinblendung_aufbauen_naechste_Aktion(lboolSondereinblendungSichtbar, larrNaechsteAktion)
-      for (let lintStunde = larrStarteit[0]; lintStunde <= larrZielzeit[0]; lintStunde++) {
-        for (let lintMinute = larrStarteit[1]; lintMinute <= larrZielzeit[1]; lintMinute++) {
-          if (lintStunde === larrNaechsteAktion[0]) {
-            if (lintMinute === larrNaechsteAktion[1]) {
-              this.Planungspruefung([lintStunde, lintMinute])
-              this.Aufgabe_eintragen([lintStunde, lintMinute], 'Sondereinblendung')
-              lboolSondereinblendungSichtbar = !lboolSondereinblendungSichtbar
-              larrNaechsteAktion = this.Aufgabe_Sondereinblendung_aufbauen_naechste_Aktion(lboolSondereinblendungSichtbar, larrNaechsteAktion)
+      for (let lintStunde = larrStartzeit[0]; lintStunde <= larrZielzeit[0]; lintStunde++) {
+        if (lintStunde === larrZielzeit[0]) {
+          for (let lintMinute = larrStartzeit[1]; lintMinute <= larrZielzeit[1]; lintMinute++) {
+            if (lintStunde === larrNaechsteAktion[0]) {
+              if (lintMinute === larrNaechsteAktion[1]) {
+                this.Planungspruefung([lintStunde, lintMinute])
+                this.Aufgabe_eintragen([lintStunde, lintMinute], 'Sondereinblendung')
+                lboolSondereinblendungSichtbar = !lboolSondereinblendungSichtbar
+                larrNaechsteAktion = this.Aufgabe_Sondereinblendung_aufbauen_naechste_Aktion(lboolSondereinblendungSichtbar, larrNaechsteAktion)
+              }
             }
           }
         }
+        if (lintStunde < larrZielzeit[0]) {
+          for (let lintMinute = larrStartzeit[1]; lintMinute <= 59; lintMinute++) {
+            if (lintStunde === larrNaechsteAktion[0]) {
+              if (lintMinute === larrNaechsteAktion[1]) {
+                this.Planungspruefung([lintStunde, lintMinute])
+                this.Aufgabe_eintragen([lintStunde, lintMinute], 'Sondereinblendung')
+                lboolSondereinblendungSichtbar = !lboolSondereinblendungSichtbar
+                larrNaechsteAktion = this.Aufgabe_Sondereinblendung_aufbauen_naechste_Aktion(lboolSondereinblendungSichtbar, larrNaechsteAktion)
+              }
+            }
+          }
+          larrStartzeit[1] = 0
+        }
       }
+
       if (lboolSondereinblendungSichtbar) {
         this.Planungspruefung([larrZielzeit[0], larrZielzeit[1] + this.Aufgaben.Sondereinblendung.Länge])
         this.Aufgabe_eintragen([larrZielzeit[0], larrZielzeit[1] + this.Aufgaben.Sondereinblendung.Länge], 'Sondereinblendung')
@@ -248,22 +292,35 @@ export default {
       this.Aufgabe_Zeitpunkt('Automatik_aus')
 
       this.$q.notify('Automatikzeitplan aufgebaut!')
+      console.log(this.Planung)
     },
     Automatische_Verarbeitung () {
-      console.log(this.Aufgabensammlung)
       if (Object.keys(this.Planung).length === 0) {
         this.Aufgaben_aufbauen()
       }
       this.Aufgabe_ausfuehren()
       this.Funktion = setInterval(() => {
+        if (this.$store.state.app.Fehlersuche) {
+          this.$q.notify('Bin in der Intervall-Funktion')
+        }
         this.Aufgabe_ausfuehren()
       }, 60000) // 60000
     },
     Aufgabe_ausfuehren () {
       const lintMinute = new Date().getMinutes()
       const lintStunde = new Date().getHours()
-      if (this.Planung[lintStunde] !== undefined && this.Planung[lintMinute] !== undefined && this.Planung[lintMinute].length > 0) {
+      if (this.$store.state.app.Fehlersuche) {
+        this.$q.notify('lintStunde = ' + lintStunde + ', lintMinute = ' + lintMinute)
+      }
+
+      if (this.Planung[lintStunde] !== undefined && this.Planung[lintStunde][lintMinute] !== undefined && this.Planung[lintStunde][lintMinute].length > 0) {
+        if (this.$store.state.app.Fehlersuche) {
+          this.$q.notify('Ich habe etwas gefunden')
+        }
         this.Planung[lintStunde][lintMinute].forEach(lstrAufgabe => {
+          if (this.$store.state.app.Fehlersuche) {
+            this.$q.notify('Aufgabe: ' + lstrAufgabe)
+          }
           this.on_Aufgabe(lstrAufgabe)
         })
       }

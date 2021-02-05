@@ -39,6 +39,7 @@ q-card
         dense-toggle,
         expand-separator,
         popup,
+        group="Aufgabengruppe",
         :label="AIndex",
         :icon="!Aufgabe.Aktiv ? 'alarm_off' : 'alarm_on'"
       )

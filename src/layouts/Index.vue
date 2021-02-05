@@ -73,11 +73,11 @@ q-layout(view="hHh LpR fFf")
       )
         q-item-section
           q-item-label Live
-      //-q-item(
+      q-item(
         clickable,
         v-ripple,
         @click="on_Eintrag('Vorgaben'); Schublade_offen = false"
-        )
+      )
         q-item-section
           q-item-label Vorgabenpflege
       q-item(
@@ -116,6 +116,7 @@ import keinOBSGefunden from './../components/Module/OBS/nicht_gefunden'
 import Einrichtung from './../components/Module/Einrichtung/Index'
 import Hilfe from './../components/Module/Hilfe/Hilfe'
 import Vorgaben from './../components/Module/Vorgaben/Index'
+
 export default {
   name: 'MainLayout',
   components: { Live, Einstellungen, KeinOBSAktiv, Einrichtung, keinOBSGefunden, Hilfe, Vorgaben },

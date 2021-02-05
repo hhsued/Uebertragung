@@ -8,7 +8,8 @@ q-card-section
   )
   Selektion(
     v-if="$store.state.Lieder.Erfassungsmodus === 'Selektion'",
-    @eingegeben="$emit('eingegeben')"
+    @eingegeben="$emit('eingegeben')",
+    @strophen_unsichtbar="$emit('strophen_unsichtbar')"
   )
   //-Vorgabe(v-if="$store.state.Lieder.Erfassungsmodus === 'Vorgabe'")
 </template>

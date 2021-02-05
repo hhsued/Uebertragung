@@ -1,6 +1,7 @@
 
 <template lang="pug">
 q-card-section(style="padding-top: 5px; padding-bottom: 5px")
+  b Bisher angezeigte Strophen: {{ angezeigteStrophen }}
   .q-pa-md.row.items-start.q-gutter-md
     q-card(
       v-for="(Strophe, Index) in $store.state.Lieder.Strophen",
@@ -61,7 +62,8 @@ export default {
   components: { Werkzeugleiste, Perspektive, Steuerung, Editor },
   data: () => ({
     Text: '',
-    Standardperspektive: true
+    Standardperspektive: true,
+    angezeigteStrophen: ''
   }),
   mounted () {
   },
@@ -84,6 +86,13 @@ export default {
     },
 
     on_Aktion (Aktion, Index) {
+      if (Aktion === 'Live') {
+        if (this.angezeigteStrophen.length === 0) {
+          this.angezeigteStrophen = (Index + 1).toString()
+        } else {
+          this.angezeigteStrophen += ', ' + (Index + 1).toString()
+        }
+      }
       const larrSzenen = this.$E.Daten_laden('Lieder', 'Szenen')
       const larrQuellen = this.$E.Daten_laden('Lieder', 'Quellen')
       const lobjAnsichtskonfiguration = [

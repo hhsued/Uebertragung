@@ -14,7 +14,10 @@ div
           @Aktion="on_Aktion"
         )
         q-separator
-        Daten(@eingegeben="on_Strophen_anzeigen")
+        Daten(
+          @eingegeben="on_Strophen_anzeigen",
+          @strophen_unsichtbar="Strophen_anzeigen = false"
+        )
   .row(v-if="Strophen_anzeigen")
     .col
       Strophen(
@@ -93,12 +96,12 @@ export default {
 
       this.$Helfer.Aktionen(
         Aktion,
-        lstrSzene,
+        ((this.$store.state.Lieder.Art === 'Abendmahlslied') ? 'S_Strophe' : lstrSzene),
         'Lieder',
         this.Standardperspektive,
         this.$store,
         lobjAnsichtskonfiguration,
-        'Lied_Anzeige')
+        ((this.$store.state.Lieder.Art === 'Abendmahlslied') ? 'Lied_Abendmahl' : 'Lied_Normal'))
     },
 
     Liedtitel () {

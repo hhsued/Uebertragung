@@ -53,6 +53,12 @@ export default {
     Modus: 'anzeigen'
   }),
   watch: {
+    value: {
+      immediate: true,
+      handler (NeuerWert, AlterWert) {
+        this.Wert = NeuerWert
+      }
+    }
   },
   mounted () {
     this.Wert = this.value

@@ -8,7 +8,7 @@ import lmodE from './Einstellungen'
 const gobjProgramm = lmodE.laden('obs')
 let gobsIstVerbunden = false
 let garrSzenen = []
-let gobjquellen = {}
+let gobjQuellen = {}
 
 // eslint-disable-next-line no-unused-vars
 /* const Farben = {
@@ -265,17 +265,23 @@ export default {
   },
   async Quellen_laden () {
     if (!gobsIstVerbunden) {
-      gobjquellen = []
+      gobjQuellen = []
       const lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(gobjProgramm.Optionen, 'basic', 'scenes', gobjProgramm.Standardszenensammlung + '.json'), 'utf-8'))
       lobjDaten.sources.forEach(lobjQuelle => {
-        gobjquellen.push(lobjQuelle.name)
+        gobjQuellen.push(lobjQuelle.name)
       })
-      return gobjquellen
+      return gobjQuellen
     }
-    if (gobjquellen.length === 0) {
+    gobjQuellen = []
+    if (gobjQuellen === undefined) {
+      gobjQuellen = []
+    }
+    if (Object.keys(gobjQuellen).length === 0) {
       this.pruefe_Verbindung()
       const lobjData = await gobjOBS.send('GetSourcesList')
-      gobjquellen = lobjData.sources
+      lobjData.sources.forEach(lobjQuelle => {
+        gobjQuellen.push(lobjQuelle.name)
+      })
     }
   },
   async Szenen_laden () {
@@ -288,15 +294,25 @@ export default {
     }
     if (garrSzenen.length === 0) {
       this.pruefe_Verbindung()
+      garrSzenen = []
       const lobjData = await gobjOBS.send('GetSceneList')
-      garrSzenen = lobjData.scenes
+      lobjData.scenes.forEach(lobjSzene => {
+        garrSzenen.push(lobjSzene.name)
+      })
+    }
+  },
+  Szenen (Filterparameter = '') {
+    if (Filterparameter !== '') {
+      // return this.filtere_quellen(Filterparameter)
+    } else {
+      return garrSzenen
     }
   },
   Quellen (Filterparameter = '') {
     if (Filterparameter !== '') {
       return this.filtere_quellen(Filterparameter)
     } else {
-      return gobjquellen
+      return gobjQuellen
     }
   },
   filter_Dialog (vueInstanz) {
@@ -317,12 +333,12 @@ export default {
   },
   filtere_Quellen (Filterparameter) {
     const larrWerte = []
-    for (let lintZaehler = 0; lintZaehler < gobjquellen.length; lintZaehler++) {
+    for (let lintZaehler = 0; lintZaehler < gobjQuellen.length; lintZaehler++) {
       if (Filterparameter.length === 0) {
-        larrWerte.push(gobjquellen[lintZaehler].name)
+        larrWerte.push(gobjQuellen[lintZaehler].name)
       } else {
-        if (Filterparameter.includes(gobjquellen[lintZaehler].typeId)) {
-          larrWerte.push(gobjquellen[lintZaehler].name)
+        if (Filterparameter.includes(gobjQuellen[lintZaehler].typeId)) {
+          larrWerte.push(gobjQuellen[lintZaehler].name)
         }
       }
     }

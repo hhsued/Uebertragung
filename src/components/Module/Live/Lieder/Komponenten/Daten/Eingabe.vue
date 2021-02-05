@@ -48,6 +48,7 @@ export default {
       switch (Aktion) {
         case 'loeschen':
           this.$Helfer.loeschen(this.$data)
+          this.$store.commit('Lieder/setze', { Nummer: '', Art: '' })
           break
         case 'laden':
           this.$Helfer.laden(GlobalerSpeicher + '_' + Was, GlobalerSpeicher, this.$data, this.$store)

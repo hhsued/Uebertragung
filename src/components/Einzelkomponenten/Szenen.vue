@@ -1,13 +1,13 @@
 
 <template lang="pug">
-q-select(
-  :label="lokale_Beschriftung",
-  v-model="Wert",
-  :options="Optionen",
-  @input="on_Eingabe"
-)
-  template(v-slot:after)
-
+div
+  q-select(
+    :label="lokale_Beschriftung",
+    v-model="Wert",
+    :options="Optionen",
+    @input="on_Eingabe"
+  )
+    template(v-slot:after)
 </template>
 <script>
 /* eslint-disable camelcase */
@@ -35,7 +35,7 @@ export default {
   mounted () {
     this.lokale_Beschriftung = this.Beschriftung.charAt(0).toUpperCase() + this.Beschriftung.slice(1)
     this.Wert = this.value
-    this.Optionen = this.$obs.Szenen()
+    this.Optionen = this.$OBS.Szenen()
   },
   methods: {
     on_Eingabe () {

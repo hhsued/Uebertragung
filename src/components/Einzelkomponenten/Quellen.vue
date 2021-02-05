@@ -1,12 +1,13 @@
 
 <template lang="pug">
-q-select(
-  :label="lokale_Beschriftung",
-  v-model="Wert",
-  :options="Optionen",
-  @input="on_Eingabe"
-)
-  template(v-slot:after)
+div
+  q-select(
+    :label="lokale_Beschriftung",
+    v-model="Wert",
+    :options="Optionen",
+    @input="on_Eingabe"
+  )
+    template(v-slot:after)
 </template>
 <script>
 /* eslint-disable camelcase */

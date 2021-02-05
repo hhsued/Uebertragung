@@ -27,7 +27,8 @@ span
     q-toolbar.bg-green-2
       q-toolbar-title Strophen aus der Vorgabe
     q-toolbar-title.bg-yellow-2
-      q-toolbar-title {{ Strophen }}
+      q-toolbar-title(v-if="Strophen.length > 0") {{ Strophen }}
+      q-toolbar-title(v-if="Strophen.length === 0") Alle
 </template>
 <script>
 
@@ -81,6 +82,9 @@ export default {
           break
         case 'loeschen':
           this.$Helfer.loeschen(this.$data)
+          this.$emit('strophen_unsichtbar')
+          this.Strophen = null
+          this.$store.commit('Lieder/setze', { Nummer: '', Art: '' })
           break
         case 'laden':
           this.$Helfer.laden(GlobalerSpeicher + '_' + Was, GlobalerSpeicher, this.$data, this.$store)
