@@ -1,0 +1,62 @@
+{
+    "Start_Ende": [],
+    "Lieder": [{
+            "Hinweis": "Eingangslied",
+            "Typ": "Eingangslied",
+            "Lied": "100",
+            "Strophen": [
+                1,
+                4,
+                5
+            ]
+        },
+        {
+            "Hinweis": "Bußlied",
+            "Typ": "Bußlied",
+            "Lied": "28",
+            "Strophen": [
+                1
+            ]
+        },
+        {
+            "Hinweis": "erstes Abendmahlslied",
+            "Typ": "Abendmahlslied",
+            "Lied": "101",
+            "Strophen": [
+                1,
+                2,
+                3
+            ]
+        }
+    ],
+    "Textwort": [{
+            "Hinweis": "Textwort",
+            "Text": true,
+            "Buch": "1. Korinther",
+            "Kapitel": 1,
+            "Verse": [
+                1,
+                2
+            ]
+        },
+        {
+            "Hinweis": "Bibellesung",
+            "Text": false,
+            "Buch": "1. Korinther",
+            "Kapitel": 1,
+            "Verse": [
+                1,
+                2
+            ]
+        }
+    ],
+    "Personen": [{
+            "Person": "Köster, Christian",
+            "Typ": "Dienstleiter"
+        },
+        {
+            "Person": "Schalla, Jörg",
+            "Typ": "Mitdienend"
+        }
+    ]
+}

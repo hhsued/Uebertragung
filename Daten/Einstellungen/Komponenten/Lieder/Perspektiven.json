@@ -1,0 +1,75 @@
+{
+  "Lied_Anzeige": {
+    "Szene": "S_Lied",
+    "aktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Mitte",
+        "Mikro_Rechts"
+      ],
+      "Quellen": [
+        "T_Lied-Nr",
+        "T_Lied-Titel",
+        "G_Bauchbinde"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "Mikro_Mitte",
+      "Mikros": [
+        "Mikro_Audioanlage"
+      ],
+      "Quellen": []
+    }
+  },
+  "Strophen_Normal": {
+    "Szene": "S_Strophe",
+    "aktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Mitte",
+        "Mikro_Rechts"
+      ],
+      "Quellen": [
+        "T_Lied-Nr",
+        "T_Lied-Titel",
+        "G_Bauchbinde",
+        "FQ_Hintergrund-Weiß",
+        "T_Strophe"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "Mikro_Mitte",
+      "Mikros": [
+        "Mikro_Audioanlage"
+      ],
+      "Quellen": [
+        "G_Abendmahl"
+      ]
+    }
+  },
+  "Strophen_Abendmahl": {
+    "Szene": "S_Strophe",
+    "aktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Mitte",
+        "Mikro_Rechts"
+      ],
+      "Quellen": [
+        "T_Lied-Nr",
+        "T_Lied-Titel",
+        "G_Bauchbinde",
+        "FQ_Hintergrund-Weiß",
+        "T_Strophe",
+        "G_Abendmahl"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "Mikro_Mitte",
+      "Mikros": [
+        "Mikro_Audioanlage"
+      ],
+      "Quellen": []
+    }
+  }
+}

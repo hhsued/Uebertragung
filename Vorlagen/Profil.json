@@ -1,0 +1,55 @@
+{
+  "General": {
+    "Name": "Gottesdienst"
+  },
+  "Video": {
+    "BaseCX": 1920,
+    "BaseCY": 1080,
+    "OutputCX": 1920,
+    "OutputCY": 1080,
+    "FPSType": 0,
+    "FPSCommon": 30
+  },
+  "Panels": {
+    "CookieId": "C8C2D916D7675EAF"
+  },
+  "SimpleOutput": {
+    "VBitrate": 5000,
+    "StreamEncoder": "qsv",
+    "RecQuality": "Stream",
+    "ABitrate": 128,
+    "UseAdvanced": false
+  },
+  "Output": {
+    "Mode": "Simple"
+  },
+  "AdvOut": {
+    "TrackIndex": 1,
+    "RecType": "Standard",
+    "RecTracks": 1,
+    "FLVTrack": 1,
+    "FFOutputToFile": true,
+    "FFFormat": "",
+    "FFFormatMimeType": "",
+    "FFVEncoderId": 0,
+    "FFVEncoder": "",
+    "FFAEncoderId": 0,
+    "FFAEncoder": "",
+    "FFAudioMixes": 1,
+    "Rescale": true,
+    "Track1Bitrate": 128
+  },
+  "Audio": {
+    "SampleRate": 44100,
+    "ChannelSetup": "Mono"
+  },
+  "WebsocketAPI": {
+    "ServerEnabled": true,
+    "ServerPort": 4444,
+    "DebugEnabled": false,
+    "AlertsEnabled": false,
+    "AuthRequired": false,
+    "AuthSecret": "aPhaR2A0FcmgOWPXKLkEcQOLEboyjSpj0ksyzrBnRcs:",
+    "AuthSalt": "WuBRYrUc9LRIAKumcsPjvDan5PA0IWH51zpNzc818WU:"
+  }
+}

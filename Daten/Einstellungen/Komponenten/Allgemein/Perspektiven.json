@@ -1,0 +1,23 @@
+{
+  "Standard": {
+    "Szene": "S_Hinweis",
+    "aktiv": {
+      "Kamera": "K_Mitte",
+      "Mikros": [
+        "Mikro_Audioanlage"
+      ],
+      "Quellen": [
+        "T_Hinweis",
+        "FQ_Hintergrund-Weiß"
+      ]
+    },
+    "inaktiv": {
+      "Kamera": "K_Rechts",
+      "Mikros": [
+        "Mikro_Mitte",
+        "Mikro_Rechts"
+      ],
+      "Quellen": []
+    }
+  }
+}
