@@ -1,23 +1,21 @@
 
 <template lang="pug">
 div
-  q-splitter(
-    v-model="Trenner")
+  q-splitter(v-model="Trenner")
     template(v-slot:before)
-      q-tabs(
-        v-model="Registerkarten"
-        vertical)
+      q-tabs(v-model="Registerkarten", vertical)
         q-tab(name="Steuerung", label="Steuerung")
         q-tab(name="Automatik", label="Automatik")
         q-tab(name="Einstellungen", label="Einstellungen")
     template(v-slot:after)
       q-tab-panels(
-        v-model="Registerkarten"
-        animated
-        swipeable
-        vertical
-        transition-prev="jump-up"
-        transition-next="jump-up")
+        v-model="Registerkarten",
+        animated,
+        swipeable,
+        vertical,
+        transition-prev="jump-up",
+        transition-next="jump-up"
+      )
         q-tab-panel(name="Steuerung")
           Steuerung(:Taste="Taste")
         q-tab-panel(name="Automatik")
@@ -43,9 +41,6 @@ export default {
   },
   mounted () {
     this.$store.commit('StartEnde/laden')
-    window.addEventListener('keypress', function (e) {
-      this.Taste = ((e.altKey) ? 'Alt' : '') + ((e.shiftKey) ? 'Shift' : '') + ((e.ctrlKey) ? 'Strg' : '') + e.code
-    })
   },
   methods: {
 

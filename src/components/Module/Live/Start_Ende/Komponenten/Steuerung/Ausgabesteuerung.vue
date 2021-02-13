@@ -268,6 +268,21 @@ export default {
       if (Modus === 'Live') {
         this.$OBS.Szene('Vorschau', larrSzenen.Ende)
         this.$OBS.Szene('Live', larrSzenen.Ende, 3000)
+        if (this.$store.state.StartEnde.AutomatischBeenden) {
+          const lintMillisekunden = this.$store.state.StartEnde.AutomatischBeendenMinuten * 60 * 1000
+          setTimeout(() => {
+            this.automatisch_Beenden(this.$store.state.StartEnde.AutomatischYouTubeUnsichtbar)
+          }, lintMillisekunden)
+        }
+      }
+    },
+    automatisch_Beenden (YouTube) {
+      this.$store.commit('app/setze', { Übertragung_läuft: false })
+      this.$OBS.Stream('beenden')
+      this.$q.notify('Stream beendet')
+      if (YouTube) {
+        this.$YT.Schalter(this.$store.state.app.YouTubeID, 'private')
+        this.$q.notify('YouTube auf privat gesetzt')
       }
     }
   }

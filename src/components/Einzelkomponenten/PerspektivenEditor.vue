@@ -115,6 +115,7 @@ export default {
   }),
   async mounted () {
     this.Quellen = await this.$OBS.Quellen()
+    this.Quellen.sort()
     this.Perspektiven = this.$E.Daten_laden(this.Komponente, 'Perspektiven')
   },
   methods: {

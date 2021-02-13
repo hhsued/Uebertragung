@@ -7,6 +7,8 @@ export default function () {
     Bereich: '',
     Zusatz: '',
     Personen: [],
-    Bereiche: ['ohne']
+    Bereiche: ['ohne'],
+    Selektion: {},
+    Eingabe: {}
   }
 }

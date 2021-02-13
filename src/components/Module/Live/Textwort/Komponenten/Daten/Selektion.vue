@@ -14,6 +14,13 @@ span
       @click="on_Aktion('Vorgabe')",
       dense
     )
+  q-checkbox(
+    v-model="OhneText",
+    v-if="Vers_von !== null",
+    dense,
+    @input="on_NurText"
+  ) Nur die Bibelstelle ausgeben
+  hr
   q-select(
     label="Buch",
     v-model="Buch",
@@ -53,6 +60,7 @@ export default {
   props: {},
   components: {},
   data: () => ({
+    OhneText: false,
     Verse: null,
     Buch: null,
     Buecher: [],
@@ -67,9 +75,29 @@ export default {
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Textwort/Cache', {
+      Modus: 'Selektion',
+      OhneText: this.OhneText,
+      Buch: this.Buch,
+      dasKapitel: this.dasKapitel,
+      Vers_von: this.Vers_von,
+      Vers_bis: this.Vers_bis
+    })
   },
   mounted () {
     this.Buecher = this.$Bibel.Buecher()
+    if (Object.keys(this.$store.state.Textwort.Selektion).length > 0) {
+      this.Buch = this.$store.state.Textwort.Selektion.Buch
+      this.on_Buch()
+      this.dasKapitel = this.$store.state.Textwort.Selektion.dasKapitel
+      this.on_Kapitel()
+      this.Vers_von = this.$store.state.Textwort.Selektion.Vers_von
+      this.on_Vers_von()
+      this.Vers_bis = this.$store.state.Textwort.Selektion.Vers_bis
+      if (this.Vers_bis !== null) {
+        this.on_Vers_bis()
+      }
+    }
   },
   methods: {
     Vorgabe_Textworte () {
@@ -82,7 +110,8 @@ export default {
     on_Aktion (Aktion, Wert = null, GlobalerSpeicher = 'Textwort', Was = 'Selektion') {
       switch (Aktion) {
         case 'Vorgabe':
-
+          // eslint-disable-next-line no-case-declarations
+          const VueInstance = this
           this.$q.dialog({
             title: 'Welche Vorgabe',
             message: 'Welche Vorgabe soll übernommen werden?',
@@ -95,15 +124,15 @@ export default {
             cancel: true,
             persistent: true
           }).onOk(Auswahl => {
-            this.Buch = this.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Buch
-            this.on_Buch()
-            this.dasKapitel = this.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Kapitel
-            this.on_Kapitel()
-            this.Vers_von = this.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Vers_von
-            this.on_Vers_von()
-            this.Vers_bis = this.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Vers_bis
-            if (this.Vers_bis !== null) {
-              this.on_Vers_bis()
+            VueInstance.Buch = VueInstance.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Buch
+            VueInstance.on_Buch()
+            VueInstance.dasKapitel = VueInstance.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Kapitel
+            VueInstance.on_Kapitel()
+            VueInstance.Vers_von = VueInstance.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Vers_von
+            VueInstance.on_Vers_von()
+            VueInstance.Vers_bis = VueInstance.$store.state.Steuerung.Vorgabe.Textworte[Auswahl].Vers_bis
+            if (VueInstance.Vers_bis !== null) {
+              VueInstance.on_Vers_bis()
             }
           })
           this.$q.notify('Vorgabe geladen')
@@ -133,6 +162,9 @@ export default {
           this.$store.commit(GlobalerSpeicher + '/setze', { [Wert]: this.$data[Wert] })
           break
       }
+    },
+    on_NurText () {
+      this.$store.commit('Textwort/setze', { OhneText: this.OhneText })
     },
     on_Vers_bis () {
       this.hole('Verse')

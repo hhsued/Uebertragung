@@ -34,9 +34,17 @@ export default {
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Allgemein/Cache', {
+      Modus: 'Selektion',
+      Hinweis: this.Hinweis,
+      Hinweistext: this.Hinweistext
+    })
   },
   mounted () {
-
+    if (Object.keys(this.$store.state.Allgemein.Selektion).length > 0) {
+      this.Hinweis = this.$store.state.Allgemein.Selektion.Hinweis
+      this.Hinweistext = this.$store.state.Allgemein.Selektion.Hinweistext
+    }
   },
   methods: {
     on_Aktion (Aktion, Variable = null, GlobalerSpeicher = 'Allgemein', Erfassungsmodus = 'Eingabe') {

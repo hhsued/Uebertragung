@@ -1,27 +1,10 @@
 <template lang="pug">
 q-layout(view="hHh LpR fFf")
-  q-dialog(v-model="DialogNeues")
+  q-dialog(v-model="DialogNeues", full-width)
     q-card
       q-card-section
         .text-h6 Neuerung in dieser Version
-      q-card-section.q-pt-none
-        ul
-          li
-            .text-h6 Automatik
-            div Vereinfachung der Einstellungen durch weniger Parameter
-            div Steuerung nach Stunde und Minute im Gegensatz zur Steuerung nur per Minute
-            div Pflegen von mehreren Automatiken, welche einfach geladen werden können
-          li
-            .text-h6 OBS-Steuerung
-            div Da es ab und zu, durch das asynchrone Verhalten von Javascript, Überholer in der Befehlsausführung gab, wurden die Befehle zur OBS-Steuerung nun auf synchrone Ausführung umgestellt
-          li
-            .text-h6 Vorgaben
-            div Pflege von Vorgaben über https://ugd.hh-sued.de/ von jedem internetfähigem Gerät aus
-            div Mehrere Vorgaben können erstellt wwerden
-            div Für einzelne Abschnitte können mehrere Einstellungen gepflegt werden (z.B. mehrere Lieder)
-            div Vorgaben können im Steuerungsprogramm geladen werden.
-            div Neues Symbol in den einzelnen Abschnitten (drei Striche mit Punkten davor), über welches die verfügbaren Abschnitte mit den Einstellungen aus den Vorgaben gefüllt werden können
-            div Nutzt man für die Lieder eines aus den Vorgaben, so werden die in den Vorgaben gewählten Strophen grün hervorgehoben
+      Versionsinformationen(v-if="DialogNeues")
       q-card-actions(align="right")
         q-btn(flat, label="Schliessen", v-close-popup, dense)
   q-header.bg-primary.text-white(reveal, bordered)
@@ -116,10 +99,11 @@ import keinOBSGefunden from './../components/Module/OBS/nicht_gefunden'
 import Einrichtung from './../components/Module/Einrichtung/Index'
 import Hilfe from './../components/Module/Hilfe/Hilfe'
 import Vorgaben from './../components/Module/Vorgaben/Index'
+import Versionsinformationen from './../components/Module/Live/Komponenten/Versionsinformationen'
 
 export default {
   name: 'MainLayout',
-  components: { Live, Einstellungen, KeinOBSAktiv, Einrichtung, keinOBSGefunden, Hilfe, Vorgaben },
+  components: { Live, Einstellungen, KeinOBSAktiv, Einrichtung, keinOBSGefunden, Hilfe, Vorgaben, Versionsinformationen },
 
   data: () => ({
     DialogNeues: false,

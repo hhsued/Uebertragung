@@ -51,3 +51,8 @@ export function PersonHinzu (globaleDaten, Person) {
   }
   gmodFS.writeFile(lstrDatenpfad, globaleDaten.Optionen.Personen, 'utf-8')
 }
+export function Cache (globaleDaten, Optionen) {
+  const lstrModus = Optionen.Modus
+  delete Optionen.Modus
+  globaleDaten[lstrModus] = Optionen
+}

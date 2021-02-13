@@ -96,6 +96,25 @@ export default {
         this.Standardperspektive,
         this.$store,
         lobjAnsichtskonfiguration)
+      if (this.$store.state.Personen.AutoAusblenden) {
+        const Millisekunden = this.$store.state.Personen.AutoAusblendenSekunden * 1000
+        console.log(Millisekunden)
+        setTimeout(() => {
+          this.ausblenden(this.$store.state.Personen.AutoAusblendenPerspektive)
+        }, Millisekunden)
+      }
+    },
+    ausblenden (Perspektive) {
+      const lobjPerpektiven = this.$E.Daten_laden('Basis', 'Perspektiven')
+      const lobjSzenen = this.$E.Daten_laden('Basis', 'Szenen')
+      this.$store.commit('app/Kamera_ändern', Perspektive)
+      this.$store.commit('app/Mikrofone_ändern', Perspektive)
+      this.$OBS.Perspektive(
+        lobjPerpektiven[Perspektive].Szene,
+        lobjPerpektiven[Perspektive].aktiv,
+        lobjPerpektiven[Perspektive].inaktiv)
+      this.$OBS.Szene('Vorschau', lobjSzenen.Kameras)
+      this.$OBS.Szene('Live', lobjSzenen.Kameras, 2000)
     },
     on_Filter_gewaehlt () {
       this.filtern(this.$store.state.Personen.Bereich)

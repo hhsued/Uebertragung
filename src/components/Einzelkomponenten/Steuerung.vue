@@ -2,20 +2,20 @@
 q-btn-group(style="margin-left: 10%; margin-right: 10%", spread, push, dense)
   q-btn(
     dense,
-    v-if="Live",
-    icon="play_arrow",
-    unelevated,
-    @click="$emit('Aktion', 'Live')"
-  )
-    q-tooltip Live
-  q-btn(
-    dense,
     v-if="Vorschau",
     icon="visibility",
     unelevated,
     @click="$emit('Aktion', 'Vorschau')"
   )
     q-tooltip Vorschau
+  q-btn(
+    dense,
+    v-if="Live",
+    icon="play_arrow",
+    unelevated,
+    @click="$emit('Aktion', 'Live')"
+  )
+    q-tooltip Live
   q-btn(
     dense,
     v-if="loeschen",

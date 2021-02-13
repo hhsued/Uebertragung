@@ -1,6 +1,9 @@
 {
   "Standardwerte": {
     "Gottesdienstart": "Gottesdienst",
+    "AutomatischBeenden": true,
+    "AutomatischBeendenMinuten": 2,
+    "AutomatischYouTubeUnsichtbar": true,
     "Uhrzeit": false,
     "Datum": true,
     "Hinweis": false,

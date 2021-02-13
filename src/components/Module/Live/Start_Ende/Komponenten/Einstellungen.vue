@@ -28,7 +28,7 @@
             )
           q-tab-panel(name="Standardwerte")
             q-toolbar
-              q-toolbar-title Standardwerte
+              q-toolbar-title Standardwerte für den Start der Übertragung
             div
               q-select(
                 label="Gottesdienstart",
@@ -45,6 +45,26 @@
               q-input(label="Hinweistext", v-if="Konfig.Standardwerte.Hinweis")
             div
               q-checkbox(v-model="Konfig.Standardwerte.Startzeit") Startuhrzeit
+            q-toolbar
+              q-toolbar-title Standardwerte für das Beenden der Übertragung
+            div
+              q-checkbox(
+                label="Übertragung automatisch beenden",
+                v-model="Konfig.Standardwerte.AutomatischBeenden"
+              )
+            div
+              q-input(
+                label="Automatisch beenden nach X Minuten",
+                type="Number",
+                v-model.number="Konfig.Standardwerte.AutomatischBeendenMinuten",
+                v-if="Konfig.Standardwerte.AutomatischBeenden"
+              )
+            div
+              q-checkbox(
+                label="YouTube automatisch unsichtbar schalten",
+                v-model="Konfig.Standardwerte.AutomatischYouTubeUnsichtbar",
+                v-if="Konfig.Standardwerte.AutomatischBeenden"
+              )
             div
               q-checkbox(v-model="Konfig.Standardwerte.Endetext") Text am Ende
           q-tab-panel(name="Optionen")
@@ -86,6 +106,7 @@ export default {
     Quellen: {},
     Szenen: {}
   }),
+
   mounted () {
     this.Konfig = this.$E.Daten_laden('StartEnde', 'Start_Ende')
     this.Szenen = this.$E.Daten_laden('StartEnde', 'Szenen')

@@ -48,6 +48,9 @@ export default {
     },
     Trenner: 10
   }),
+  beforeUnmount () {
+
+  },
   mounted () {
   },
   methods: {

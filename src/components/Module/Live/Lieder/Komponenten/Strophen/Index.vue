@@ -63,6 +63,7 @@ export default {
       this.$q.notify('Erfolgreich gespeichert')
     },
     laden () {
+      const larrAnzuzeigendeStrophen = []
       if (this.$store.state.Lieder.Nummer !== '' && this.$store.state.Lieder.Nummer !== '0') {
         const larrAlleStrophen = []
         const larrVorgabeStrophen = []
@@ -87,11 +88,16 @@ export default {
             if (larrVorgabeStrophen.length > 0) {
               if (larrVorgabeStrophen.indexOf(lintZaehler + 1) > -1) {
                 this.$set(larrDaten, 'Hintergrundfarbe', 'bg-green-2')
+                larrAnzuzeigendeStrophen.push(lintZaehler)
               }
             } else {
               this.$set(larrDaten, 'Hintergrundfarbe', 'bg-green-2')
+              larrAnzuzeigendeStrophen.push(lintZaehler)
             }
           } else {
+            if (this.$store.state.Lieder.Vorgabestrophen === null) {
+              larrAnzuzeigendeStrophen.push(lintZaehler)
+            }
             this.$set(larrDaten, 'Hintergrundfarbe', 'bg-white')
           }
 
@@ -99,7 +105,7 @@ export default {
           this.$set(larrDaten, 'Bearbeitungsmodus', false)
           larrAlleStrophen.push(larrDaten)
         }
-        this.$store.commit('Lieder/setze', { Titel: larrStophen.Titel, Strophen: larrAlleStrophen })
+        this.$store.commit('Lieder/setze', { Titel: larrStophen.Titel, Strophen: larrAlleStrophen, AnzuzeigendeStrophe: larrAnzuzeigendeStrophen })
       }
     },
     // ----------------------------------------------------------------

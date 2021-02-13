@@ -14,6 +14,27 @@ span
       v-if="$store.state.Steuerung.Vorgabe !== null",
       @click="on_Aktion('Vorgabe')"
     )
+  q-checkbox(
+    v-if="Person !== ''",
+    v-model="AutoAusblenden",
+    @input="on_Auswahl"
+  ) Automatisch ausblenden
+  q-input(
+    label="Automatisch ausblenden nach X Sekunden",
+    v-if="Person !== '' && AutoAusblenden",
+    v-model.number="AutoAusblendenSekunden",
+    type="number",
+    @input="on_Auswahl"
+  )
+  q-select(
+    label="Zielperspektive",
+    :options="['Predigt', 'Musik']",
+    v-model="AutoAusblendenPerspektive",
+    v-if="Person !== '' && AutoAusblenden",
+    @input="on_Auswahl"
+  )
+  q-separator(v-if="Person !== '' && AutoAusblenden")
+  hr(v-if="Person !== '' && AutoAusblenden")
   q-select(
     dense,
     v-model="Person",
@@ -37,13 +58,31 @@ export default {
   components: {},
   data: () => ({
     Person: '',
-    Bereich: ''
+    Bereich: '',
+    AutoAusblenden: true,
+    AutoAusblendenSekunden: 30,
+    AutoAusblendenPerspektive: 'Predigt'
   }),
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Personen/Cache', {
+      Modus: 'Selektion',
+      Person: this.Person,
+      Bereich: this.Bereich,
+      AutoAusblenden: this.AutoAusblenden,
+      AutoAusblendenSekunden: this.AutoAusblendenSekunden,
+      AutoAusblendenPerspektive: this.AutoAusblendenPerspektive
+    })
   },
   mounted () {
+    if (Object.keys(this.$store.state.Personen.Selektion).length > 0) {
+      this.Person = this.$store.state.Personen.Selektion.Person
+      this.Bereich = this.$store.state.Personen.Selektion.Bereich
+      this.AutoAusblenden = this.$store.state.Personen.Selektion.AutoAusblenden
+      this.AutoAusblendenSekunden = this.$store.state.Personen.Selektion.AutoAusblendenSekunden
+      this.AutoAusblendenPerspektive = this.$store.state.Personen.Selektion.AutoAusblendenPerspektive
+    }
   },
   methods: {
     Vorgabe_Personen () {
@@ -99,7 +138,7 @@ export default {
       })
     },
     on_Auswahl () {
-      this.$store.commit('Personen/setze', { Person: this.Person, Bereich: this.Bereich })
+      this.$store.commit('Personen/setze', { Person: this.Person, Bereich: this.Bereich, AutoAusblenden: this.AutoAusblenden, AutoAusblendenSekunden: this.AutoAusblendenSekunden, AutoAusblendenPerspektive: this.AutoAusblendenPerspektive })
     },
     filtern () {
       this.$store.commit('Personen/filtern', this.Bereich)

@@ -40,8 +40,20 @@ export default {
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Lieder/Cache', {
+      Modus: 'Eingabe',
+      Nummer: this.Nummer,
+      Titel: this.Titel,
+      Art: this.Art
+    })
   },
   mounted () {
+    if (Object.keys(this.$store.state.Lieder.Eingabe).length > 0) {
+      this.Nummer = this.$store.state.Lieder.Eingabe.Nummer
+      this.Titel = this.$store.state.Lieder.Eingabe.Titel
+      this.Art = this.$store.state.Lieder.Eingabe.Art
+      this.on_Eingabe()
+    }
   },
   methods: {
     on_Aktion (Aktion, Wert = null, GlobalerSpeicher = 'Lieder', Was = 'Eingabe') {

@@ -80,7 +80,17 @@ export default {
     this.on_Liedersammlung()
   },
   methods: {
+    säubere_Text () {
+      for (let lintZaehler = 0; lintZaehler < this.Strophen.length; lintZaehler++) {
+        this.Strophen[lintZaehler] = this.Strophen[lintZaehler].replace(/&nbsp;/g, '')
+        this.Strophen[lintZaehler] = this.Strophen[lintZaehler].replace(/<div>/g, '<br />')
+        this.Strophen[lintZaehler] = this.Strophen[lintZaehler].replace(/<\/div>/g, '')
+        this.Strophen[lintZaehler] = this.Strophen[lintZaehler].replace(/<span style="color: inherit;">/g, '')
+        this.Strophen[lintZaehler] = this.Strophen[lintZaehler].replace(/<\/span>/g, '')
+      }
+    },
     on_speichern () {
+      this.säubere_Text()
       gmodDS.writeFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + '.json'), JSON.stringify({ Titel: this.Titel, Strophen: this.Strophen }), 'utf-8')
       this.$q.notify('Daten gespeichert')
     },

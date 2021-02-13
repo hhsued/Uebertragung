@@ -10,7 +10,7 @@ q-card(style="min-width: 300px")
   q-separator
   q-card-section(style="padding: 0px")
     q-toolbar
-      q-toolbar-title Anzeigeoptionen
+      q-toolbar-title Anzeigeoptionen für das Starten der Übertragung
       q-space
       q-btn(icon="clear", unelevated, @click="on_Aktion('loeschen')", dense)
       q-btn(icon="input", unelevated, @click="on_Aktion('laden')", dense)
@@ -67,7 +67,30 @@ q-card(style="min-width: 300px")
     )
   q-separator
   q-card-section(style="padding-top: 5px; padding-bottom: 5px")
+    .text-h6 Anzeigeoptionen für das Beenden der Übertragung
+    q-checkbox(
+      label="Übertragung automatisch beenden",
+      dense,
+      v-model="AutomatischBeenden",
+      @input="on_sichern('AutomatischBeenden')"
+    )
+    q-input(
+      label="Automatisch beenden nach X Minuten",
+      dense,
+      type="Number",
+      v-model.number="AutomatischBeendenMinuten",
+      v-if="AutomatischBeenden",
+      @input="on_sichern('AutomatischBeendenMinuten')"
+    )
+    q-checkbox(
+      label="YouTube automatisch auf privat schalten",
+      dense,
+      v-model="AutomatischYouTubeUnsichtbar",
+      v-if="AutomatischBeenden",
+      @input="on_sichern('AutomatischYouTubeUnsichtbar')"
+    )
     //- Text am Ende
+    br
     q-checkbox(
       v-model="Hinweis_Ende",
       @input="on_sichern('Hinweis_Ende')",
@@ -95,6 +118,9 @@ export default {
     Szenen
   },
   data: () => ({
+    AutomatischBeenden: true,
+    AutomatischBeendenMinuten: 2,
+    AutomatischYouTubeUnsichtbar: true,
     Art: '',
     Hinweis: false,
     Hinweistext: '',
@@ -108,6 +134,21 @@ export default {
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('StartEnde/Cache', {
+      Modus: 'Selektion',
+      AutomatischBeenden: this.AutomatischBeenden,
+      AutomatischBeendenMinuten: this.AutomatischBeendenMinuten,
+      AutomatischYouTubeUnsichtbar: this.AutomatischYouTubeUnsichtbar,
+      Art: this.Art,
+      Hinweis: this.Hinweis,
+      Hinweistext: this.Hinweistext,
+      Uhrzeit: this.Uhrzeit,
+      Datum: this.Datum,
+      Startuhrzeit: this.Startuhrzeit,
+      Startzeit: this.Startzeit,
+      Hinweis_Ende: this.Hinweis_Ende,
+      Hinweis_Ende_Text: this.Hinweis_Ende_Text
+    })
   },
   mounted () {
     const lobjKonfig = this.$E.Daten_laden('StartEnde', 'Start_Ende')
@@ -127,6 +168,36 @@ export default {
     this.on_sichern('Startzeit')
     this.Startuhrzeit = lobjKonfig.Standardwerte.Startzeit
     this.on_sichern('Startuhrzeit')
+    this.AutomatischBeenden = lobjKonfig.Standardwerte.AutomatischBeenden
+    this.on_sichern('AutomatischBeenden')
+    this.AutomatischBeendenMinuten = lobjKonfig.Standardwerte.AutomatischBeendenMinuten
+    this.on_sichern('AutomatischBeendenMinuten')
+    this.AutomatischYouTubeUnsichtbar = lobjKonfig.Standardwerte.AutomatischYouTubeUnsichtbar
+    this.on_sichern('AutomatischYouTubeUnsichtbar')
+    if (Object.keys(this.$store.state.StartEnde.Selektion).length > 0) {
+      this.AutomatischBeenden = this.$store.state.StartEnde.Selektion.AutomatischBeenden
+      this.on_sichern('AutomatischBeenden')
+      this.AutomatischBeendenMinuten = this.$store.state.StartEnde.Selektion.AutomatischBeendenMinuten
+      this.on_sichern('AutomatischBeendenMinuten')
+      this.AutomatischYouTubeUnsichtbar = this.$store.state.StartEnde.Selektion.AutomatischYouTubeUnsichtbar
+      this.on_sichern('AutomatischYouTubeUnsichtbar')
+      this.Art = this.$store.state.StartEnde.Selektion.Art
+      this.on_sichern('Art')
+      this.Datum = this.$store.state.StartEnde.Selektion.Datum
+      this.on_sichern('Datum')
+      this.Hinweis_Ende = this.$store.state.StartEnde.Selektion.Hinweis_Ende
+      this.on_sichern('Hinweis_Ende')
+      this.Hinweis_Ende_Text = this.$store.state.StartEnde.Selektion.Hinweis_Ende_Text
+      this.on_sichern('Hinweis_Ende_Text')
+      this.Hinweis = this.$store.state.StartEnde.Selektion.Hinweis
+      this.on_sichern('Hinweis')
+      this.Hinweistext = this.$store.state.StartEnde.Selektion.Hinweistext
+      this.on_sichern('Hinweistext')
+      this.Startzeit = this.$store.state.StartEnde.Selektion.Startzeit
+      this.on_sichern('Startzeit')
+      this.Startuhrzeit = this.$store.state.StartEnde.Selektion.Startuhrzeit
+      this.on_sichern('Startuhrzeit')
+    }
   },
   methods: {
     on_sichern (WelchenWert) {

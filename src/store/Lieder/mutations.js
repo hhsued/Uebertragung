@@ -30,3 +30,8 @@ export function VorgabeHinzufügen (globaleDaten, Optionen) {
 export function VorgabeEntfernen (globaleDaten, Index) {
   globaleDaten.Vorgabe.splice(Index, 1)
 }
+export function Cache (globaleDaten, Optionen) {
+  const lstrModus = Optionen.Modus
+  delete Optionen.Modus
+  globaleDaten[lstrModus] = Optionen
+}

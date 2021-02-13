@@ -15,6 +15,8 @@ export default function () {
     Hinweis_Ende_Text: '',
     Sondereinblendung: false,
     Sondereinblendung_Intervall: 0,
-    Sondereinblendung_Szene: ''
+    Sondereinblendung_Szene: '',
+    Selektion: {},
+    Eingabe: {}
   }
 }

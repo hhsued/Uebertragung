@@ -40,14 +40,34 @@ export default {
     Zeituhr: null,
     Nummer: '',
     Art: '',
+    Vorgabe: '',
     Strophen: null,
     nicht_speichern: ['Zeituhr', 'nicht_speichern']
   }),
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Lieder/Cache', {
+      Modus: 'Selektion',
+      Nummer: this.Nummer,
+      Art: this.Art,
+      Vorgabe: this.Vorgabe
+    })
   },
   mounted () {
+    if (Object.keys(this.$store.state.Lieder.Selektion).length > 0) {
+      this.Vorgabe = this.$store.state.Lieder.Selektion.Vorgabe
+      if (this.Vorgabe !== '') {
+        this.Nummer = this.$store.state.Steuerung.Vorgabe.Lieder[this.Vorgabe].Nummer
+        this.Art = this.$store.state.Steuerung.Vorgabe.Lieder[this.Vorgabe].Typ
+        this.Strophen = this.$store.state.Steuerung.Vorgabe.Lieder[this.Vorgabe].Strophen
+      } else {
+        this.Nummer = this.$store.state.Lieder.Selektion.Nummer
+        this.Art = this.$store.state.Lieder.Selektion.Art
+      }
+
+      this.on_Eingabe()
+    }
   },
   methods: {
     Vorgabe_Lieder () {
@@ -73,6 +93,7 @@ export default {
             cancel: true,
             persistent: true
           }).onOk(Auswahl => {
+            this.Vorgabe = Auswahl
             this.Nummer = this.$store.state.Steuerung.Vorgabe.Lieder[Auswahl].Nummer
             this.Art = this.$store.state.Steuerung.Vorgabe.Lieder[Auswahl].Typ
             this.Strophen = this.$store.state.Steuerung.Vorgabe.Lieder[Auswahl].Strophen

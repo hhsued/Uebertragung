@@ -71,19 +71,22 @@ export default {
           Kontur: true,
           Konturfarbe: '4278190080',
           Konturgröße: 5
-        },
-        {
-          Typ: 'Text_Hintergrund',
-          Textquelle: larrQuellen.Verse,
-          Szene: lstrSzene,
-          Text: lobjTextwort.Text,
-          Schriftart: 'Arial',
-          Schriftgröße: 60,
-          Unten: 10,
-          Oben: 10,
-          Links: 40,
-          Hintergrundquelle: larrQuellen.Hintergrund_Verse
         }]
+      if (!this.$store.state.Textwort.OhneText) {
+        lobjAnsichtskonfiguration.push(
+          {
+            Typ: 'Text_Hintergrund',
+            Textquelle: larrQuellen.Verse,
+            Szene: lstrSzene,
+            Text: lobjTextwort.Text,
+            Schriftart: 'Arial',
+            Schriftgröße: 60,
+            Unten: 10,
+            Oben: 10,
+            Links: 40,
+            Hintergrundquelle: larrQuellen.Hintergrund_Verse
+          })
+      }
 
       this.$Helfer.Aktionen(
         Aktion,
@@ -91,7 +94,8 @@ export default {
         'Textwort',
         this.Standardperspektive,
         this.$store,
-        lobjAnsichtskonfiguration)
+        lobjAnsichtskonfiguration,
+        (this.$store.state.Textwort.OhneText) ? 'Ohne_Text' : 'Standard')
     },
     säubere_Text (Text) {
       let lstrText = Text.replace(/&nbsp;/g, '')

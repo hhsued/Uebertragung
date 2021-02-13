@@ -1,7 +1,32 @@
 
 <template lang="pug">
 q-card-section(style="padding-top: 5px; padding-bottom: 5px")
-  b Bisher angezeigte Strophen: {{ angezeigteStrophen }}
+  b Meine Stophen: {{ $store.state.Lieder.AnzuzeigendeStrophe }}
+  q-card(style="margin-left: 30%; margin-right: 30%")
+    q-card-section
+      .text-h6 Lieder
+    q-card-section
+      q-list
+        q-item
+          q-item-section(avatar)
+            q-btn(
+              unelevated,
+              icon="fast_rewind",
+              v-if="StrophenZeiger > 0",
+              @click="StrophenZeiger--; on_Aktion('Live', $store.state.Lieder.AnzuzeigendeStrophe[StrophenZeiger])"
+            )
+          q-item-section(avatar)
+            div(v-if="StrophenZeiger !== -1")
+              .text-h6 Aktuelle Strophe: {{ $store.state.Lieder.AnzuzeigendeStrophe[StrophenZeiger] + 1 }}
+            div(v-if="StrophenZeiger === -1")
+              .text-h6 Noch keine Strophe
+          q-item-section(avatar)
+            q-btn(
+              unelevated,
+              @click="StrophenZeiger++; on_Aktion('Live', $store.state.Lieder.AnzuzeigendeStrophe[StrophenZeiger])",
+              icon="fast_forward",
+              v-if="StrophenZeiger < $store.state.Lieder.AnzuzeigendeStrophe.length - 1"
+            )
   .q-pa-md.row.items-start.q-gutter-md
     q-card(
       v-for="(Strophe, Index) in $store.state.Lieder.Strophen",
@@ -10,22 +35,31 @@ q-card-section(style="padding-top: 5px; padding-bottom: 5px")
     )
       q-card-section(style="padding-top: 5px; padding-bottom: 5px")
         q-btn(
+          v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'",
           icon="play_arrow",
           unelevated,
           @click="on_Aktion('Live', Index)",
           dense
         )
         q-btn(
-          ,
+          v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'",
           dense,
           icon="visibility",
           unelevated,
           @click="on_Aktion('Vorschau', Index)"
         )
       q-card-section(style="padding-top: 5px; padding-bottom: 5px")
-        .text-h6 Strophe {{ Index + 1 }}
-        div(v-html="Strophe.Text")
-        div(v-if="Strophe.Text.indexOf('<br />') === -1")
+        .text-h6(v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'") Strophe {{ Index + 1 }}
+        div(
+          v-html="Strophe.Text",
+          v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'"
+        )
+        div(v-if="Strophe.Text === 'Anzeigerechte nicht vorhanden'")
+          .text-h6.text-negative Anzeigerechte nicht vorhanden, es kann nur die Liednummer angezeigt werden
+
+        div(
+          v-if="Strophe.Text.indexOf('<br />') === -1 && Strophe.Text.length > 60"
+        )
           b ACHTUNG: Die Strophe ist noch nicht für die Ausgabe optimiert worden
   //-q-list( bordered separator)
     q-item(
@@ -61,6 +95,8 @@ export default {
   props: ['Nummer', 'Standardperspektive', 'Strophen'],
   components: { Werkzeugleiste, Perspektive, Steuerung, Editor },
   data: () => ({
+    StrophenZeiger: -1,
+    AktuelleStrophe: null,
     Text: '',
     Standardperspektive: true,
     angezeigteStrophen: ''

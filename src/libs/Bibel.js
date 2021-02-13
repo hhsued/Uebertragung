@@ -21,10 +21,10 @@ export default {
       'Daten',
       'Bibel',
       'Bibelinhalt',
-      Buch.replace(' ', '') + '_' + Kapitel.toString() + '.json')
+      this.Text_reinigen(Buch).replace(' ', '') + '_' + Kapitel.toString() + '.json')
   },
   lade_Kapitel (Buch, Kapitel) {
-    lobjKapitel = JSON.parse(lmodDS.readFileSync(this.Datei_Kapitelinhalt(Buch, Kapitel)))
+    lobjKapitel = JSON.parse(lmodDS.readFileSync(this.Datei_Kapitelinhalt(this.Text_reinigen(Buch), Kapitel)))
   },
   hole_Verse_anzahl (Buch, Kapitel) {
     if (lobjKapitel.length === 0) {
@@ -52,6 +52,10 @@ export default {
       }
     }
     return larrText
+  },
+
+  Text_reinigen (Text) {
+    return Text.replace('Ä', 'Ae').replace('ä', 'ae').replace('Ö', 'Oe').replace('ö', 'oe').replace('Ü', 'Ue').replace('ü', 'ue').replace('ß', 'ss')
   }
 
 }

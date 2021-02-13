@@ -36,6 +36,7 @@ export default {
     this.lokale_Beschriftung = this.Beschriftung.charAt(0).toUpperCase() + this.Beschriftung.slice(1)
     this.Wert = this.value
     this.Optionen = this.$OBS.Quellen()
+    this.Optionen.sort()
   },
   methods: {
     on_Eingabe () {

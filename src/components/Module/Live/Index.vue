@@ -300,9 +300,6 @@ export default {
       }
       this.Aufgabe_ausfuehren()
       this.Funktion = setInterval(() => {
-        if (this.$store.state.app.Fehlersuche) {
-          this.$q.notify('Bin in der Intervall-Funktion')
-        }
         this.Aufgabe_ausfuehren()
       }, 60000) // 60000
     },

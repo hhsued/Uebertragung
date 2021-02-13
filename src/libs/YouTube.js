@@ -37,6 +37,7 @@ export default {
     return lobjOAuth2Klient
   },
   async holeUebertragungsID () {
+    let lboolGefunden = false
     const lobjAuthentifizierungsdaten = this.Authorisieren()
     let lmixUebertragungGefunden = false
     const Uebertragungen = google.youtube('v3')
@@ -50,9 +51,12 @@ export default {
         const larrDatum = this.Konverter(lobjEintrag.snippet.scheduledStartTime.split('T')[0].split('-'))
         const larrZeit = this.Konverter(lobjEintrag.snippet.scheduledStartTime.split('T')[1].replace('Z', '').split(':'), { Stelle: 0, Wert: 1 })
         const ldtJetzt = new Date()
-        if (ldtJetzt.getFullYear() === larrDatum[0] && ldtJetzt.getMonth() === (larrDatum[1] - 1) && ldtJetzt.getDate() === larrDatum[2]) {
-          if (ldtJetzt.getHours() < larrZeit[0]) {
-            lmixUebertragungGefunden = lobjEintrag.id
+        if (!lboolGefunden) {
+          if (ldtJetzt.getFullYear() === larrDatum[0] && ldtJetzt.getMonth() === (larrDatum[1] - 1) && ldtJetzt.getDate() === larrDatum[2]) {
+            if (ldtJetzt.getHours() < larrZeit[0]) {
+              lmixUebertragungGefunden = lobjEintrag.id
+              lboolGefunden = true
+            }
           }
         }
       })

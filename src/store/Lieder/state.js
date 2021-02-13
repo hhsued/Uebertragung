@@ -8,6 +8,9 @@ export default function () {
     Strophen: [],
     Liederarten: [],
     Vorgabe: [],
-    Vorgabestrophen: null
+    Vorgabestrophen: null,
+    AnzuzeigendeStrophe: [],
+    Selektion: {},
+    Eingabe: {}
   }
 }

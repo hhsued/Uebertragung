@@ -53,11 +53,26 @@ export default {
   watch: {
   },
   beforeDestroy () {
+    this.$store.commit('Textwort/Cache', {
+      Modus: 'Eingabe',
+      Text: this.Text,
+      Buch: this.Buch,
+      dasKapitel: this.dasKapitel,
+      Vers_von: this.Vers_von,
+      Vers_bis: this.Vers_bis
+    })
   },
   mounted () {
     this.$store.commit('Textwort/setze', { Vers_von: null, Vers_bis: null, Verse: null, dasKapitel: null, Buch: null })
     this.$emit('Eingabe')
     this.$store.commit('Textwort/setze', { Erfassungsmodus: 'Eingabe' })
+    if (Object.keys(this.$store.state.Textwort.Eingabe).length > 0) {
+      this.Buch = this.$store.state.Textwort.Eingabe.Buch
+      this.dasKapitel = this.$store.state.Textwort.Eingabe.dasKapitel
+      this.Vers_von = this.$store.state.Textwort.Eingabe.Vers_von
+      this.Vers_bis = this.$store.state.Textwort.Eingabe.Vers_bis
+      this.Text = this.$store.state.Textwort.Eingabe.Text
+    }
   },
   methods: {
     on_Aktion (Aktion, Wert = null, GlobalerSpeicher = 'Textwort', Was = 'Eingabe') {

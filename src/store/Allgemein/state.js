@@ -2,6 +2,8 @@ export default function () {
   return {
     Perspektive: 'Perspektive',
     Hinweis: false,
-    Hinweistext: ''
+    Hinweistext: '',
+    Selektion: {},
+    Eingabe: {}
   }
 }

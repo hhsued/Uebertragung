@@ -43,7 +43,7 @@
                   b Vers Nr. {{ Object.keys(Vers)[0] }}
                   div(v-html="Vers[Object.keys(Vers)[0]]")
                   div(
-                    v-if="Vers[Object.keys(Vers)[0]].length > 78 && Vers[Object.keys(Vers)[0]].indexOf('<br />') === -1"
+                    v-if="Vers[Object.keys(Vers)[0]].length > 60 && Vers[Object.keys(Vers)[0]].indexOf('<br />') === -1"
                   )
                     b.text-negative Es könnte sein, dass dieser Vers nicht für die Anzeige optiemiert ist
 </template>

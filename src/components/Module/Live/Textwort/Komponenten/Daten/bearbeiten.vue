@@ -12,7 +12,9 @@ q-card
           )
         q-item-section
           div(v-html="Zeile.Text")
-          div(v-if="Zeile.Text.indexOf('<br />') === -1")
+          div(
+            v-if="Zeile.Text.indexOf('<br />') === -1 && Zeile.Text.length > 60"
+          )
             b.text-negative Es könnte sein, dass der Text noch nicht für die Anzeige vorbereitet ist (Umbrüche)
 </template>
 
