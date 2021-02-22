@@ -86,6 +86,7 @@ export default {
   },
   mounted () {
     this.Buecher = this.$Bibel.Buecher()
+    this.Buecher.sort()
     if (Object.keys(this.$store.state.Textwort.Selektion).length > 0) {
       this.Buch = this.$store.state.Textwort.Selektion.Buch
       this.on_Buch()

@@ -1,6 +1,8 @@
 <template lang="pug">
 q-card
   q-card-section
+    b Bitte überprüfen, per Vorschau, ob der Text in der Breite für die Übertragung passt. Die automatische Prüfung ist auch abhängig von der Breite der einzelnen genutzten Zeichen.
+  q-card-section
     q-list
       q-item(v-for="(Zeile, ZIndex) in alle_Verse", :key="ZIndex")
         q-item-section(style="width: 50px", avatar)
@@ -13,9 +15,11 @@ q-card
         q-item-section
           div(v-html="Zeile.Text")
           div(
-            v-if="Zeile.Text.indexOf('<br />') === -1 && Zeile.Text.length > 60"
+            v-if="Zeile.Text.indexOf('<br />') === -1 && Zeile.Text.length > 77"
           )
             b.text-negative Es könnte sein, dass der Text noch nicht für die Anzeige vorbereitet ist (Umbrüche)
+              br
+              | ACHTUNG: Dieses kann varieren abhängig von der Breite einzelner Zeichen
 </template>
 
 <script>

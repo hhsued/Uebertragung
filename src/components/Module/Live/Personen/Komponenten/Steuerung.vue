@@ -97,11 +97,12 @@ export default {
         this.$store,
         lobjAnsichtskonfiguration)
       if (this.$store.state.Personen.AutoAusblenden) {
-        const Millisekunden = this.$store.state.Personen.AutoAusblendenSekunden * 1000
-        console.log(Millisekunden)
-        setTimeout(() => {
-          this.ausblenden(this.$store.state.Personen.AutoAusblendenPerspektive)
-        }, Millisekunden)
+        if (Aktion === 'Live') {
+          const Millisekunden = this.$store.state.Personen.AutoAusblendenSekunden * 1000
+          setTimeout(() => {
+            this.ausblenden(this.$store.state.Personen.AutoAusblendenPerspektive)
+          }, Millisekunden)
+        }
       }
     },
     ausblenden (Perspektive) {

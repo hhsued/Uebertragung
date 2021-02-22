@@ -69,6 +69,7 @@ export default {
     Quellen: {},
     Planung: {},
     Funktion: null,
+    Standardperspektive: false,
     Aufgabensammlung: null,
     Automatik: false,
     Komponente: 'StartEnde',
@@ -411,9 +412,99 @@ export default {
       this.$YT.Schalter(this.$store.state.app.YouTubeID, 'unlisted')
       this.$q.notify('Aufgabe: YouTube-Übertragung auf \'unsichtbar\' setzen wurde ausgeführt')
     },
+    Stellen (Sollanzahl, Wert) {
+      let lstrWert = ''
+      Wert = Wert.toString()
+
+      if (Wert.length < Sollanzahl) {
+        for (let lintZaehler = 0; lintZaehler < Sollanzahl - 1; lintZaehler++) {
+          lstrWert += '0'
+        }
+      }
+      return lstrWert + Wert
+    },
+    Starten (Aktion) {
+      const larrSzenen = this.$E.Daten_laden('StartEnde', 'Szenen')
+      const larrQuellen = this.$E.Daten_laden('StartEnde', 'Quellen')
+
+      const lobjAnsichtskonfiguration = []
+
+      if (this.$store.state.StartEnde.Art !== 'ohne') {
+        lobjAnsichtskonfiguration.push({
+          Typ: 'Text',
+          Szene: larrSzenen.Warten,
+          Quelle: larrQuellen.Anfang_Gottesdienstart,
+          Text: this.$store.state.StartEnde.Art,
+          Schriftgröße: 150,
+          Schriftart: 'Arial',
+          Kontur: false
+        })
+      } else {
+        this.$OBS.Sichtbarkeit(larrSzenen.Warten, larrQuellen.Anfang_Gottesdienstart, false)
+      }
+
+      if (this.$store.state.StartEnde.Datum) {
+        lobjAnsichtskonfiguration.push(
+          {
+            Typ: 'Text',
+            Quelle: larrQuellen.Anfang_Datum,
+            Szene: larrSzenen.Warten,
+            Text: this.Stellen(2, new Date().getDate()) + '.' + this.Stellen(2, new Date().getMonth() + 1) + '.' + this.Stellen(4, new Date().getFullYear()),
+            Schriftgröße: 150,
+            Schriftart: 'Arial',
+            Kontur: false
+          }
+        )
+      } else {
+        this.$OBS.Sichtbarkeit(larrSzenen.Warten, larrQuellen.Anfang_Datum, false)
+      }
+      if (this.$store.state.StartEnde.Hinweis) {
+        lobjAnsichtskonfiguration.push(
+          {
+            Typ: 'Text',
+            Quelle: larrQuellen.Anfang_Starthinweise,
+            Szene: larrSzenen.Warten,
+            Text: this.$store.state.StartEnde.Hinweistext,
+            Schriftgröße: 60,
+            Schriftart: 'Arial',
+            Kontur: false
+          }
+        )
+      } else {
+        this.$OBS.Sichtbarkeit(larrSzenen.Warten, larrQuellen.Anfang_Starthinweise, false)
+      }
+      if (this.$store.state.StartEnde.Startuhrzeit) {
+        if (this.$store.state.StartEnde.Startzeit !== '') {
+          lobjAnsichtskonfiguration.push(
+            {
+              Typ: 'Text',
+              Quelle: larrQuellen.Anfang_Beginn,
+              Szene: larrSzenen.Warten,
+              Text: 'Beginn: ' + this.$store.state.StartEnde.Startzeit,
+              Schriftgröße: 90,
+              Schriftart: 'Arial',
+              Kontur: false
+            }
+          )
+        } else {
+          this.$OBS.Sichtbarkeit(larrSzenen.Warten, larrQuellen.Anfang_Beginn, false)
+        }
+      } else {
+        this.$OBS.Sichtbarkeit(larrSzenen.Warten, larrQuellen.Anfang_Beginn, false)
+      }
+
+      this.$Helfer.Aktionen(
+        Aktion,
+        larrSzenen.Warten,
+        'StartEnde',
+        this.Standardperspektive,
+        this.$store,
+        lobjAnsichtskonfiguration)
+    },
     on_Aufgabe (Aufgabe) {
       switch (Aufgabe) {
         case 'Starten':
+          this.Starten('Live')
           this.$OBS.Stream('starten')
           this.$store.commit('app/setze', { Übertragung_läuft: true })
           this.$q.notify('Aufgabe: Die Übertragung wurde gestartet')

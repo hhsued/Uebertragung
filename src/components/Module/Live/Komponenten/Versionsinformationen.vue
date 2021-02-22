@@ -3,6 +3,24 @@ q-card-section
   q-scroll-area(style="height: 500px")
     ul
       li
+        .text-h6 1.3.1
+        ul
+          li
+            .text-h6 Lieder
+            div In der Strophenanzeige ist nun die Schaltfläche für die Vorschau links, damit ist ein Angleich an die weitere Verwendung geschehen
+            div Hat mein für ein Lied die Kategorie 'Ohne' ausgewählt, wird das Wort 'ohne' nicht mehr in der Liedbeschreibung im Live-Bildschirm angezeigt
+          li
+            .text-h6 Personen
+            div Die zur Auswahl stehenden Personen wird nicht mehr mit jedem Aufruf des Moduls verdoppelt
+            div Schaut man sich die ausgewählte Person in der Vorschau an, so kommt es nicht mehr zu einer automatischen Überblendung
+          li
+            .text-h6 Textworte
+            div Die Bücher der Bibel sind nun alphabetisch sortiert
+            div Wenn ein Vers kürzer ist als die Bildschirmanzeige, kommt es nicht mehr zu einer Warnung
+          li
+            .text-h6 Automatik
+            div Wenn die Automatik nun den Stream startet, wird auch automatisch der Wartebildschirm live geschaltet. Vorher wurde immer der aktuell in der Vorschau befindliche Bildschirm live geschaltet
+      li
         .text-h6 1.3.0
         ul
           li

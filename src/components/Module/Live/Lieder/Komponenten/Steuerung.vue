@@ -124,6 +124,8 @@ export default {
         lstrLied = 'Nr. ' + this.$store.state.Lieder.Nummer
         if (this.$store.state.Lieder.Art === '') {
           lstrLied = 'EingangsLied ' + lstrLied
+        } else if (this.$store.state.Lieder.Art === 'ohne') {
+          lstrLied = 'Nr.  ' + lstrLied
         } else {
           lstrLied = this.$store.state.Lieder.Art + ' ' + lstrLied
         }

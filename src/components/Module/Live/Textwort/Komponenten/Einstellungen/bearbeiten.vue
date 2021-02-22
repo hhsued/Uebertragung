@@ -84,6 +84,7 @@ export default {
   },
   mounted () {
     this.Buecher = this.$Bibel.Buecher()
+    this.Buecher.sort()
   },
   methods: {
     on_bearbeiten (Index) {

@@ -101,27 +101,6 @@ export default {
   }),
   // ShiftStrgKeyS
   watch: {
-    Taste: {
-      immediate: true,
-      handler (NeuerWert, AlterWert) {
-        if (NeuerWert !== null) {
-          switch (NeuerWert) {
-            case 'KeyL':
-              this.on_Aktion('Live')
-              break
-            case 'KeyV':
-              this.on_Aktion('Vorschau')
-              break
-            case 'ShiftKeyL':
-              this.on_Ende('Live')
-              break
-            case 'ShiftKeyV':
-              this.on_Ende('Vorschau')
-              break
-          }
-        }
-      }
-    }
   },
   mounted () {
   },

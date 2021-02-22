@@ -7,14 +7,17 @@ const lstrDatenpfad = gmodPath.join(
   'Daten', 'Personen', 'Personen.json'
 )
 export function laden (globaleDaten) {
+  console.log(globaleDaten.Personen.length)
   globaleDaten.Datenpfad = lstrDatenpfad
-  const lobjPersonen = JSON.parse(gmodFS.readFileSync(lstrDatenpfad, 'utf-8'))
-  lobjPersonen.forEach(lobjPerson => {
-    globaleDaten.Personen.push(lobjPerson.Nachname + ', ' + lobjPerson.Vorname)
-    if (!globaleDaten.Bereiche.includes(lobjPerson.Bereich)) {
-      globaleDaten.Bereiche.push(lobjPerson.Bereich)
-    }
-  })
+  if (globaleDaten.Personen.length === 0) {
+    const lobjPersonen = JSON.parse(gmodFS.readFileSync(lstrDatenpfad, 'utf-8'))
+    lobjPersonen.forEach(lobjPerson => {
+      globaleDaten.Personen.push(lobjPerson.Nachname + ', ' + lobjPerson.Vorname)
+      if (!globaleDaten.Bereiche.includes(lobjPerson.Bereich)) {
+        globaleDaten.Bereiche.push(lobjPerson.Bereich)
+      }
+    })
+  }
   globaleDaten.Personen.sort()
 }
 export function filtern (globaleDaten, Filterwert) {

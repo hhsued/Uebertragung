@@ -36,17 +36,17 @@ q-card-section(style="padding-top: 5px; padding-bottom: 5px")
       q-card-section(style="padding-top: 5px; padding-bottom: 5px")
         q-btn(
           v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'",
-          icon="play_arrow",
-          unelevated,
-          @click="on_Aktion('Live', Index)",
-          dense
-        )
-        q-btn(
-          v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'",
           dense,
           icon="visibility",
           unelevated,
           @click="on_Aktion('Vorschau', Index)"
+        )
+        q-btn(
+          v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'",
+          icon="play_arrow",
+          unelevated,
+          @click="on_Aktion('Live', Index)",
+          dense
         )
       q-card-section(style="padding-top: 5px; padding-bottom: 5px")
         .text-h6(v-if="Strophe.Text !== 'Anzeigerechte nicht vorhanden'") Strophe {{ Index + 1 }}
