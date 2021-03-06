@@ -36,6 +36,20 @@ export default {
     lobjOAuth2Klient.credentials = this.Daten_fuer_den_Zugang()
     return lobjOAuth2Klient
   },
+  async holeUebertragungen () {
+    const lobjAuthentifizierungsdaten = this.Authorisieren()
+    const Uebertragungen = google.youtube('v3')
+    const lobjErgebnis = await Uebertragungen.liveBroadcasts.list({
+      auth: lobjAuthentifizierungsdaten,
+      part: 'snippet',
+      broadcastStatus: 'upcoming'
+    })
+    if (lobjErgebnis.data.items.length > 0) {
+      return lobjErgebnis.data.items
+    } else {
+      return null
+    }
+  },
   async holeUebertragungsID () {
     let lboolGefunden = false
     const lobjAuthentifizierungsdaten = this.Authorisieren()

@@ -7,7 +7,6 @@ const lstrDatenpfad = gmodPath.join(
   'Daten', 'Personen', 'Personen.json'
 )
 export function laden (globaleDaten) {
-  console.log(globaleDaten.Personen.length)
   globaleDaten.Datenpfad = lstrDatenpfad
   if (globaleDaten.Personen.length === 0) {
     const lobjPersonen = JSON.parse(gmodFS.readFileSync(lstrDatenpfad, 'utf-8'))

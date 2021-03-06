@@ -96,7 +96,12 @@ export default {
     },
     on_Lied (Lied) {
       this.Lied = Lied
-      const lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + '.json'), 'utf-8'))
+      let lobjDaten
+      try {
+        lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + '.json'), 'utf-8'))
+      } catch (Fehler) {
+        lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + 'a.json'), 'utf-8'))
+      }
       this.Titel = lobjDaten.Titel
       this.Strophen = lobjDaten.Strophen
     },

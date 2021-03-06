@@ -3,6 +3,14 @@ q-card-section
   q-scroll-area(style="height: 500px")
     ul
       li
+        .text-h6 1.3.2
+        ul
+          li
+            .text-h6 Allgemein
+            div Es wurden allgemein kleinere Fehler behoben (Startseite->Uhrzeit, Lied konnte nicht geladen werden)
+            .text-h6 YouTube-Übertragung
+            div Man muss beim Start des Programms nun eine YouTube-Übertragung auswählen (bzw. die Eingabe abbrechen)
+      li
         .text-h6 1.3.1
         ul
           li
@@ -71,31 +79,36 @@ export default {
     Aufgabensammlung: null,
     Aufgabensammlungen: []
   }),
-  watch: {
-  },
-  mounted () {
-  },
+  watch: {},
+  mounted () {},
   methods: {
     on_Automatik () {
       switch (this.$store.state.app.Automatik) {
         case true:
-          this.$q.dialog({
-            title: 'Automatik deaktivieren',
-            message: 'Möchtest Du die Automatik wirklich deaktivieren?',
-            cancel: true,
-            persistent: true
-          }).onOk(() => {
-            this.$store.commit('app/Automatik', false)
-            this.$emit('Automatik', false)
-          }).onCancel(() => {
-            this.$store.commit('app/Automatik', true)
-            this.$emit('Automatik', true)
-          })
+          this.$q
+            .dialog({
+              title: 'Automatik deaktivieren',
+              message: 'Möchtest Du die Automatik wirklich deaktivieren?',
+              cancel: true,
+              persistent: true
+            })
+            .onOk(() => {
+              this.$store.commit('app/Automatik', false)
+              this.$emit('Automatik', false)
+            })
+            .onCancel(() => {
+              this.$store.commit('app/Automatik', true)
+              this.$emit('Automatik', true)
+            })
           break
         case false:
-          lmodDS.readdirSync(lmodJoin(process.cwd(), 'Daten', 'Aufgaben')).forEach(lstrAufgabensammlung => {
-            this.Aufgabensammlungen.push(lstrAufgabensammlung.replace('.json', ''))
-          })
+          lmodDS
+            .readdirSync(lmodJoin(process.cwd(), 'Daten', 'Aufgaben'))
+            .forEach(lstrAufgabensammlung => {
+              this.Aufgabensammlungen.push(
+                lstrAufgabensammlung.replace('.json', '')
+              )
+            })
           this.dialog = true
           break
       }

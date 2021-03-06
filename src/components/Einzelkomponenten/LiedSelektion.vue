@@ -67,7 +67,11 @@ export default {
     on_Lied (Lied) {
       this.Lied = Lied
       this.Strophen = {}
-      this.Strophen = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + '.json'), 'utf-8'))
+      try {
+        this.Strophen = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + '.json'), 'utf-8'))
+      } catch (Fehler) {
+        this.Strophen = JSON.parse(gmodDS.readFileSync(gmodPfad.join(lstrDatenpfad, this.Liedersammlung, this.Lied + 'a.json'), 'utf-8'))
+      }
     },
     on_Liedersammlung (Grenzwert = null) {
       if (typeof (Grenzwert) === 'string') {

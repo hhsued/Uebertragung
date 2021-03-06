@@ -113,8 +113,13 @@ export default {
           lstrLiedTitel = ''
         }
       } else {
-        const lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
-        lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        try {
+          const lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
+          lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        } catch (Fehler) {
+          const lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + 'a.json')
+          lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        }
       }
       return lstrLiedTitel
     },
@@ -125,7 +130,7 @@ export default {
         if (this.$store.state.Lieder.Art === '') {
           lstrLied = 'EingangsLied ' + lstrLied
         } else if (this.$store.state.Lieder.Art === 'ohne') {
-          lstrLied = 'Nr.  ' + lstrLied
+          lstrLied = 'Lied ' + lstrLied
         } else {
           lstrLied = this.$store.state.Lieder.Art + ' ' + lstrLied
         }

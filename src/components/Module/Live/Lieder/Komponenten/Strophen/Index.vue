@@ -67,8 +67,15 @@ export default {
       if (this.$store.state.Lieder.Nummer !== '' && this.$store.state.Lieder.Nummer !== '0') {
         const larrAlleStrophen = []
         const larrVorgabeStrophen = []
-        const lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
-        const larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        let larrStophen
+        let lstrLiedPfad
+        try {
+          lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
+          larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        } catch (Fehler) {
+          lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + 'a.json')
+          larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        }
         if (this.$store.state.Lieder.Vorgabestrophen !== null) {
           if (this.$store.state.Lieder.Vorgabestrophen.indexOf(',') > 0) {
             this.$store.state.Lieder.Vorgabestrophen.split(',').forEach(lstrStrophe => {

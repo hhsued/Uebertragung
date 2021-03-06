@@ -66,27 +66,31 @@ div
         q-card
           q-card-section(style="padding: 0px")
             .text-h6.text-center YouTube
+            div.text-center(v-if="this.$store.state.app.YouTubeID==='Keine'") Keine YouTube-Übertragung vorhanden
           q-separator
           q-card-section(style="padding: 0px")
             q-btn.full-width(
               icon="ondemand_video",
               unelevated,
               @click="YouTube('sichtbar')",
-              dense
+              dense,
+              :disabled="this.$store.state.app.YouTubeID==='Keine'"
             )
               q-tooltip YouTube sichtbar
             q-btn.full-width(
               icon="personal_video",
               unelevated,
               @click="YouTube('unsichtbar')",
-              dense
+              dense,
+              :disabled="this.$store.state.app.YouTubeID==='Keine'"
             )
               q-tooltip YouTube UNsichtbar
             q-btn.full-width(
               icon="videocam_off",
               unelevated,
               @click="YouTube('privat')",
-              dense
+              dense,
+              :disabled="this.$store.state.app.YouTubeID==='Keine'"
             )
               q-tooltip YouTube privat
 </template>
@@ -106,7 +110,7 @@ export default {
   },
   methods: {
     YouTube (Aktion) {
-      if (!this.$store.state.app.YouTubeID) {
+      if (!this.$store.state.app.YouTubeID === 'Keine') {
         this.$q.notify('Es wurde keine passende YouTube-Übertragung für heute gefunden. Kann den Befehl nicht ausführen!')
         return
       }

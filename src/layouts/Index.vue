@@ -18,6 +18,7 @@ q-layout(view="hHh LpR fFf")
         @click="Schublade_offen = !Schublade_offen"
       )
       q-toolbar-title Übertragungen
+        span | (YouTube-ID: {{$store.state.app.YouTubeID}})
         span(v-if="KeinOBSAktiv")
           | &nbsp;(Kein OBS aktiv)
           q-btn(
@@ -119,9 +120,37 @@ export default {
     this.neue_Version()
     this.initieren()
     this.$store.commit('app/laden')
-    this.$store.commit('app/setze', { YouTubeID: await this.$YT.holeUebertragungsID() })
+    this.YouTube()
   },
   methods: {
+    async YouTube () {
+      // this.$store.commit('app/setze', { YouTubeID: await this.$YT.holeUebertragungsID() })
+      const larrAuswahl = []
+      const lobjUebertragungen = await this.$YT.holeUebertragungen()
+      if (lobjUebertragungen === null) {
+
+      } else {
+        lobjUebertragungen.forEach(lobjEintrag => {
+          larrAuswahl.push({ label: lobjEintrag.snippet.title, value: lobjEintrag.id })
+        })
+        this.$q.dialog({
+          title: 'YouTube',
+          message: 'Bitte die YouTube-Übertragung auswählen:',
+          options: {
+            type: 'radio',
+            model: 'opt1',
+            // inline: true
+            items: larrAuswahl
+          },
+          cancel: true,
+          persistent: true
+        }).onOk(lstrID => {
+          this.$store.commit('app/setze', { YouTubeID: lstrID })
+        }).onCancel(() => {
+          this.$store.commit('app/setze', { YouTubeID: 'Keine' })
+        })
+      }
+    },
     GitHub () {
       if (this.$store.state.app.GitHub === null) {
         const lstrBenutzerverzeichnis = require('os').homedir()

@@ -9,7 +9,6 @@
           unelevated,
           :color="Kamera.Hintergrund",
           :text-color="Kamera.Text",
-          :disable="Kamera.nicht_verfuegbar",
           @click="on_Kamera(Index)",
           :label="Kamera.Name"
         )

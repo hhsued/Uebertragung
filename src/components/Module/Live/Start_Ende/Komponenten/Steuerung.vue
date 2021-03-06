@@ -45,17 +45,17 @@ q-card(style="min-width: 300px")
     br
     //- Startzeit
     q-checkbox(
-      v-model="Startuhrzeit",
-      @input="on_sichern('Startuhrzeit')",
+      v-model="Startzeit_anzeigen",
+      @input="on_sichern('Startzeit_anzeigen')",
       dense
     ) Startzeit
     br
     Uhrzeit(
-      :sichtbar="Startuhrzeit",
+      :sichtbar="Startzeit_anzeigen",
       v-model="Startzeit",
       @input="on_sichern('Startzeit')"
     )
-    br(v-if="Startuhrzeit")
+    br(v-if="Startzeit_anzeigen")
   q-separator
   q-card-section(style="padding-top: 5px; padding-bottom: 5px")
     //- Hinweistext
@@ -126,7 +126,7 @@ export default {
     Hinweistext: '',
     Uhrzeit: false,
     Datum: false,
-    Startuhrzeit: false,
+    Startzeit_anzeigen: false,
     Startzeit: '',
     Hinweis_Ende: false,
     Hinweis_Ende_Text: ''
@@ -144,7 +144,7 @@ export default {
       Hinweistext: this.Hinweistext,
       Uhrzeit: this.Uhrzeit,
       Datum: this.Datum,
-      Startuhrzeit: this.Startuhrzeit,
+      Startzeit_anzeigen: this.Startzeit_anzeigen,
       Startzeit: this.Startzeit,
       Hinweis_Ende: this.Hinweis_Ende,
       Hinweis_Ende_Text: this.Hinweis_Ende_Text
@@ -166,8 +166,8 @@ export default {
     this.on_sichern('Hinweistext')
     this.Startzeit = lobjKonfig.Standardwerte.Startzeit_Uhrzeit
     this.on_sichern('Startzeit')
-    this.Startuhrzeit = lobjKonfig.Standardwerte.Startzeit
-    this.on_sichern('Startuhrzeit')
+    this.Startzeit_anzeigen = lobjKonfig.Standardwerte.Startzeit
+    this.on_sichern('Startzeit_anzeigen')
     this.AutomatischBeenden = lobjKonfig.Standardwerte.AutomatischBeenden
     this.on_sichern('AutomatischBeenden')
     this.AutomatischBeendenMinuten = lobjKonfig.Standardwerte.AutomatischBeendenMinuten
@@ -195,8 +195,8 @@ export default {
       this.on_sichern('Hinweistext')
       this.Startzeit = this.$store.state.StartEnde.Selektion.Startzeit
       this.on_sichern('Startzeit')
-      this.Startuhrzeit = this.$store.state.StartEnde.Selektion.Startuhrzeit
-      this.on_sichern('Startuhrzeit')
+      this.Startzeit_anzeigen = this.$store.state.StartEnde.Selektion.Startzeit_anzeigen
+      this.on_sichern('Startzeit_anzeigen')
     }
   },
   methods: {
@@ -204,6 +204,7 @@ export default {
       this.$store.commit('StartEnde/setze', { [WelchenWert]: this.$data[WelchenWert] })
     },
     on_Aktion (Aktion, Wert = null, GlobalerSpeicher = 'StartEnde', Was = 'Selektion') {
+      const VueInstance = this
       switch (Aktion) {
         case 'Vorgabe':
           this.$q.dialog({
@@ -222,15 +223,15 @@ export default {
             persistent: true
           }).onOk(Auswahl => {
             if (Auswahl === 'Start') {
-              this.Art = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Art
-              this.Datum = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Datum
-              this.Startuhrzeit = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Startzeit
-              this.Startzeit = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Startuhrzeit
-              this.Hinweis = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Hinweis
-              this.Hinweistext = this.$store.state.Steuerung.Vorgabe.Startbildschirm.Hinweistext
+              VueInstance.Art = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Art
+              VueInstance.Datum = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Datum
+              VueInstance.Startzeit_anzeigen = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Startzeit
+              VueInstance.Startzeit = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Startuhrzeit
+              VueInstance.Hinweis = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Hinweis
+              VueInstance.Hinweistext = VueInstance.$store.state.Steuerung.Vorgabe.Startbildschirm.Hinweistext
             } else {
-              this.Hinweis_Ende = this.$store.state.Steuerung.Vorgabe.Endbildschirm.Hinweis_Ende
-              this.Hinweis_Ende_Text = this.$store.state.Steuerung.Vorgabe.Endbildschirm.Hinweis_Ende_Text
+              VueInstance.Hinweis_Ende = VueInstance.$store.state.Steuerung.Vorgabe.Endbildschirm.Hinweis_Ende
+              VueInstance.Hinweis_Ende_Text = VueInstance.$store.state.Steuerung.Vorgabe.Endbildschirm.Hinweis_Ende_Text
             }
           })
           this.$q.notify('Vorgabe geladen')

@@ -196,8 +196,14 @@ export default {
     lade_Daten (Lied) {
       if (Lied !== 0 && Lied !== '0') {
         this.Werte.Strophen = []
-        const lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.Lied.toString() + '.json')
-        const larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        let lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.Lied.toString() + '.json')
+        let larrStophen
+        try {
+          larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        } catch (Fehler) {
+          lstrLiedPfad = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.Lied.toString() + 'a.json')
+          larrStophen = JSON.parse(gmodDS.readFileSync(lstrLiedPfad, 'utf-8'))
+        }
         this.Werte.Titel = larrStophen.Titel
         for (let lintZaehler = 0; lintZaehler < larrStophen.Strophen.length; lintZaehler++) {
           const larrDaten = {}
@@ -219,8 +225,14 @@ export default {
           lstrLiedTitel = ''
         }
       } else {
-        const lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
-        lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        let lstrLied
+        try {
+          lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + '.json')
+          lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        } catch (Fehler) {
+          lstrLied = gmodPfad.join(lstrDatenpfad, 'Gesangbuch', this.$store.state.Lieder.Nummer + 'a.json')
+          lstrLiedTitel = JSON.parse(gmodDS.readFileSync(lstrLied, 'utf-8')).Titel
+        }
       }
       return lstrLiedTitel
     },
@@ -229,13 +241,17 @@ export default {
       if (this.$store.state.Lieder.Erfassungsmodus === 'Selektion') {
         lstrLied = 'Nr. ' + this.$store.state.Lieder.Nummer
         if (this.$store.state.Lieder.Art === '') {
-          lstrLied = 'EingangsLied ' + lstrLied
+          lstrLied = 'Lied ' + lstrLied
         } else {
-          lstrLied = this.$store.state.Lieder.Art + ' ' + lstrLied
+          if (this.$store.state.Lieder.Art === 'ohne') {
+            lstrLied = 'Lied ' + lstrLied
+          } else {
+            lstrLied = this.$store.state.Lieder.Art + ' ' + lstrLied
+          }
         }
       } else {
         if (this.$store.state.Lieder.Art !== 'ohne') {
-          lstrLied = this.$store.state.Lieder.Art + ' '
+          lstrLied = 'Lied '
         }
         lstrLied += this.$store.state.Lieder.Nummer
       }

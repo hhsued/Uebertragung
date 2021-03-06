@@ -38,6 +38,9 @@ export default {
     lokaler_Hinweis: ''
   }),
   watch: {
+    value (Neu) {
+      this.Wert = Neu
+    }
   },
   mounted () {
     this.Wert = this.value

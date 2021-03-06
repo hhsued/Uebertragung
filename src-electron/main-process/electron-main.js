@@ -21,9 +21,10 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
+    width: 1920,
+    height: 1080,
     useContentSize: true,
+    center: true,
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
@@ -35,7 +36,8 @@ function createWindow () {
       // preload: path.resolve(__dirname, 'electron-preload.js')
     }
   })
-
+  mainWindow.setMenuBarVisibility(false)
+  mainWindow.maximize()
   mainWindow.loadURL(process.env.APP_URL)
 
   mainWindow.on('closed', () => {

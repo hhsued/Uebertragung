@@ -293,7 +293,6 @@ export default {
       this.Aufgabe_Zeitpunkt('Automatik_aus')
 
       this.$q.notify('Automatikzeitplan aufgebaut!')
-      console.log(this.Planung)
     },
     Automatische_Verarbeitung () {
       if (Object.keys(this.Planung).length === 0) {
