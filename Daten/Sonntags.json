@@ -1,0 +1,74 @@
+{
+    "Starten": {
+        "Status": "Inaktiv",
+        "Typ": "Zeitpunkt",
+        "Zeitpunkt": {
+            "Stunde": 9,
+            "Minute": 15
+        },
+        "Beschreibung": ""
+    },
+    "Countdown": {
+        "Status": "Aktiv",
+        "Typ": "Intervall_begrenzt",
+        "Zeitpunkt": {
+            "Stunde": 9,
+            "Minute": 16
+        },
+        "Intervall": 1,
+        "Nächster": 1,
+        "Ende": {
+            "Stunde": 9,
+            "Minute": 45
+        },
+        "Beschreibung": ""
+    },
+    "Sondereinblendung": {
+        "Status": "Inaktiv",
+        "Typ": "Intervall_begrenzt",
+        "Intervall": 4,
+        "Länge": 1,
+        "Nächster": 4,
+        "Ende": {
+            "Stunde": 9,
+            "Minute": 40
+        },
+        "Beschreibung": ""
+    },
+    "Vorspann": {
+        "Status": "Aktiv",
+        "Typ": "Zeitpunkt",
+        "Zeitpunkt": {
+            "Stunde": 9,
+            "Minute": 45
+        },
+        "Beschreibung": ""
+    },
+    "Sichtbar": {
+        "Status": "Aktiv",
+        "Typ": "Zeitpunkt",
+        "Zeitpunkt": {
+            "Stunde": 9,
+            "Minute": 45
+        },
+        "Beschreibung": ""
+    },
+    "Unsichtbar": {
+        "Status": "Aktiv",
+        "Typ": "Zeitpunkt",
+        "Zeitpunkt": {
+            "Stunde": 10,
+            "Minute": 5
+        },
+        "Beschreibung": ""
+    },
+    "Automatik_aus": {
+        "Status": "Inaktiv",
+        "Typ": "Zeitpunkt",
+        "Zeitpunkt": {
+            "Stunde": 10,
+            "Minute": 6
+        },
+        "Beschreibung": ""
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "Pfad": "C:\\Program Files\\obs-studio\\bin\\64bit",
+  "Optionen": "C:\\Users\\ckoeste1\\AppData\\Roaming\\obs-studio",
+  "Standardszenensammlung": "Übertragung_dynamisch",
+  "Verbindung": {
+    "Server": "localhost",
+    "Port": "4444",
+    "Passwort": "Nak123!HHS"
+  },
+  "Vorgaben": {
+    "Strophen": {
+      "Zeilenhoehe": 61,
+      "Schriftart": "arial",
+      "Schriftgroesse": 60,
+      "Schriftfarbe": "schwarz",
+      "links": 40,
+      "oben": 10,
+      "unten": 10
+    },
+    "Lieder": {}
+  },
+  "Autostart": {
+    "Typ": "jeden",
+    "Tag": "Sonntag",
+    "um": "9:15"
+  }
+}

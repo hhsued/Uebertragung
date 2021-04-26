@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Kamera Mitte",
+    "Hilfstext": "Mikrofon der mittigen Kamera",
+    "Quelle": "Mikro_Mitte"
+  },
+  {
+    "Name": "Kamera rechts",
+    "Hilfstext": "Mikrofon der rechten Kamera",
+    "Quelle": "Mikro_Rechts"
+  },
+  {
+    "Name": "Audioanlage",
+    "Hilfstext": "Mikrofon der rechten Kamera",
+    "Quelle": "Mikro_Audioanlage"
+  }
+]

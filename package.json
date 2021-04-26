@@ -1,0 +1,88 @@
+{
+  "name": "uebertragung",
+  "version": "1.1.3",
+  "private": true,
+  "description": "Uebertragungen",
+  "author": {
+    "name": "ckDevo",
+    "email": "40194358+ckDevo@users.noreply.github.com"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^18.0.12",
+    "@quasar/extras": "^1.0.0",
+    "axios": "^0.18.1",
+    "basic-ftp": "^4.6.3",
+    "core-js": "^3.6.5",
+    "googleapis": "^67.0.0",
+    "obs-websocket-js": "^4.0.2",
+    "quasar": "^1.0.0",
+    "quasar-cli": "^0.17.26",
+    "request": "^2.88.2",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@quasar/app": "^2.0.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "devtron": "^1.4.0",
+    "electron": "^9.0.0",
+    "electron-debug": "^3.0.1",
+    "electron-devtools-installer": "^3.0.0",
+    "electron-packager": "^14.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions",
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "_id": "uebertragung@1.1.3",
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "productName": "Uebertragungen",
+  "readme": "ERROR: No README data found!"
+}

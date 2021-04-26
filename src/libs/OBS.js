@@ -1,0 +1,394 @@
+/* eslint-disable camelcase */
+const LmodOBSWebSocket = require('obs-websocket-js')
+const gobjOBS = new LmodOBSWebSocket()
+const gmodDS = require('fs')
+const gmodPfad = require('path')
+import lmodE from './Einstellungen'
+import lmodL from './Logging'
+
+const gobjProgramm = lmodE.laden('obs')
+let gobsIstVerbunden = false
+let garrSzenen = []
+let gobjQuellen = {}
+
+// eslint-disable-next-line no-unused-vars
+/* const Farben = {
+  Schwarz: '4278190080'
+} */
+export default {
+  Verbindung () {
+    return gobjOBS
+  },
+  async pruefe_Verbindung (Server = null, Port = null, Passwort = null) {
+    lmodL.Schreibe('Prüfe auf eine Verbindung zum OBS')
+    if (gobjProgramm !== null && Server === null) {
+      Server = gobjProgramm.Verbindung.Server
+      Port = gobjProgramm.Verbindung.Port
+      Passwort = gobjProgramm.Verbindung.Passwort
+    }
+    if (Server !== null && Port !== null && Passwort !== null) {
+      if (!gobsIstVerbunden) {
+        lmodL.Schreibe('Keine Verbindung zum OBS vorhanden, versuche eine neue Verbindung aufzubauen')
+        try {
+          await gobjOBS.connect({
+            address: Server + ':' + Port,
+            password: Passwort
+          })
+        } catch (lobjError) {
+          if (lobjError.code === 'CONNECTION_ERROR') {
+            lmodL.Schreibe('Verbindung zum OBS fehlgeschlagen')
+            gobsIstVerbunden = false
+            return
+          }
+        }
+        gobsIstVerbunden = true
+        lmodL.Schreibe('Verbindung zum OBS aufgebaut')
+      }
+    } else {
+      gobsIstVerbunden = false
+    }
+    return gobsIstVerbunden
+  },
+  Vorgabe (Wovon, Welche) {
+    return gobjProgramm.Vorgaben[Wovon][Welche]
+  },
+  async Informationen (Welche, Quelle, Szene) {
+    lmodL.Schreibe('OBS-Modul: Es wurden Informationen abgerufen (Welche: ' + Welche + ', Quelle: ' + Quelle + ', Szene: ' + Szene)
+    const lobjDaten = await gobjOBS.send(Welche, {
+      item: Quelle,
+      'scene-name': Szene
+    })
+    return lobjDaten
+  },
+  async Information (Typ, Optionen) {
+    let lobjDaten = null
+    switch (Typ) {
+      case 'Szene':
+        if (typeof (Optionen) === 'string') {
+          switch (Optionen) {
+            case 'GetCurrentScene':
+              lmodL.Schreibe('OBS-Modul: Abfrage nach der aktuellen Szene')
+              // eslint-disable-next-line no-case-declarations
+              const lobjInfo = await gobjOBS.send('GetCurrentScene', {})
+              return lobjInfo
+          }
+        } else {
+          lmodL.Schreibe('OBS-Modul: Abfrage -> ' + Optionen.Anfrage + ', Szene: ' + Optionen.Szene)
+          const lobjInfo = await gobjOBS.send(Optionen.Anfrage, {
+            sceneName: Optionen.Szene
+          })
+          return lobjInfo
+        }
+        break
+      case 'Quelle':
+        // GetSourcesList
+        if (Optionen.Anfrage === 'GetSourcesList') {
+          lmodL.Schreibe('OBS-Modul: Abfrage nach der Quellenliste')
+          lobjDaten = await gobjOBS.send(Optionen.Anfrage, {})
+        } else {
+          lmodL.Schreibe('OBS-Modul: Abfrage -> ' + Optionen.Anfrage + ', Quelle: ' + Optionen.Quelle)
+          lobjDaten = await gobjOBS.send(Optionen.Anfrage, {
+            item: Optionen.Quelle,
+            'scene-name': Optionen.Szene
+          })
+        }
+        break
+    }
+    return lobjDaten
+  },
+  async Quelle (Aktion, Quelle = null, Szene = null, Daten = null) {
+    switch (Aktion) {
+      case 'Quellen':
+        lmodL.Schreibe('OBS-Modul: Quellen wurden abgefragt')
+        return await this.Information('Quelle', { Anfrage: 'GetSourcesList' })
+      case 'Info':
+        lmodL.Schreibe('OBS-Modul: Informationen zu einem Szene-Element wurden abgefragt (' + Quelle + ', ' + Szene + ')')
+        return await this.Informationen('GetSceneItemProperties', Quelle, Szene)
+      case 'neu':
+        break
+      case 'Position':
+        lmodL.Schreibe('OBS-Modul: Position setzen (Quelle: ' + Quelle + ', Szene: ' + Szene + ', x: ' + Daten.x + ', y: ' + Daten.y + ')')
+        await gobjOBS.send('SetSceneItemProperties', {
+          item: Quelle,
+          'scene-name': Szene,
+          position: {
+            x: Daten.x,
+            y: Daten.y
+          }
+        })
+        break
+      case 'Größe':
+        if (Daten.Breite === null) {
+          Daten.Breite = 1920
+        }
+        lmodL.Schreibe('OBS-Modul: Größe setzen (Quelle: ' + Quelle + ', Szene: ' + Szene + ', Breite: ' + Daten.Breite + ', Höhe: ' + Daten.Höhe + ')')
+        await gobjOBS.send('SetSceneItemProperties', {
+          item: Quelle,
+          'scene-name': Szene,
+          bounds: {
+            x: Daten.Breite,
+            y: Daten.Höhe
+          }
+        })
+        break
+      case 'Position_Größe':
+        await this.Quelle('Position', Quelle, Szene, { x: Daten.x, y: Daten.y })
+        await this.Quelle('Größe', Quelle, Szene, { Breite: Daten.Breite, Höhe: Daten.Höhe })
+        break
+    }
+  },
+  async Szene (Aktion, Szenenname = null, Dauer = 1000) {
+    switch (Aktion) {
+      case 'Sammlungen':
+        return await this.Information('Szene', { Anfrage: 'ListSceneCollections' })
+      case 'Setze Sammlung':
+        await gobjOBS.send('SetCurrentSceneCollection', {
+          'sc-name': Szenenname
+        })
+        break
+      case 'Aktuelle Sammlung':
+        return await gobjOBS.send('GetCurrentSceneCollection')
+      case 'Szenen':
+        return await this.Information('Szene', { Anfrage: 'GetSceneList' })
+      case 'neu':
+        await gobjOBS.send('CreateScene', {
+          sceneName: Szenenname
+        })
+        break
+      case 'Quelle':
+
+        break
+      case 'Live':
+        this.Überblendung('Dauer', Dauer)
+        await gobjOBS.send('SetCurrentScene', {
+          'scene-name': Szenenname
+        })
+        break
+      case 'Vorschau':
+        await gobjOBS.send('SetPreviewScene', {
+          'scene-name': Szenenname
+        })
+        break
+      case 'Aktuelle':
+        return await this.Information('Szene', 'GetCurrentScene')
+      // case 'Quellen':
+      // return await this.Szene_Info('GetSceneItemList', Szenenname)
+      case 'alle':
+        return garrSzenen
+    }
+  },
+  async Text (Quelle, Text, Schriftgroesse = 60, Schriftart = 'Arial', Kontur = false, Konturfarbe = 'Schwarz', Konturgroesse = 5) {
+    await gobjOBS.send('SetTextGDIPlusProperties', {
+      source: Quelle,
+      text: Text,
+      font: {
+        face: Schriftart,
+        size: Schriftgroesse
+      },
+      outline: Kontur,
+      // outline_color: this.Farben[Konturfarbe],
+      outline_size: Konturgroesse
+    })
+  },
+  async Sichtbarkeit (Szene, Quelle, Sichtbar = true) {
+    if (typeof (Quelle) === 'string') {
+      await gobjOBS.send('SetSceneItemProperties', {
+        'scene-name': Szene,
+        item: Quelle,
+        visible: Sichtbar
+      })
+    } else {
+      Object.keys(Quelle).forEach(lstrQuelle => {
+        this.Sichtbarkeit(Szene, Quelle[lstrQuelle], Sichtbar)
+      })
+    }
+  },
+  async Überblendung (Aktion, Daten) {
+    switch (Aktion) {
+      case 'setzen':
+        await gobjOBS.send('SetCurrentTransition', {
+          'transition-name': Daten
+        })
+        break
+      case 'Dauer':
+        await gobjOBS.send('SetTransitionDuration', {
+          duration: Daten
+        })
+        break
+    }
+  },
+  async Text_und_Hintergrund (Text, Hintergrund) {
+    if (Text.Schriftart === undefined) {
+      Text.Schriftart = 'Arial'
+    }
+    if (Text.Schriftgröße === undefined) {
+      Text.Schriftgröße = 60
+    }
+    if (Text.Kontur === undefined) {
+      Text.Kontur = false
+      Text.Konturgröße = 0
+    }
+    const lintTexthöhe = Text.Text.split('\n').length * Text.Schriftgröße
+    await this.Text(
+      Text.Quelle,
+      Text.Text,
+      Text.Schriftgröße,
+      Text.Schriftart,
+      Text.Kontur,
+      '',
+      Text.Konturgröße)
+    await this.Quelle(
+      'Position',
+      Text.Quelle,
+      Text.Szene,
+      { x: Text.Links, y: (1080 - lintTexthöhe - Text.Unten) })
+    await this.Quelle(
+      'Position_Größe',
+      Hintergrund.Quelle,
+      Hintergrund.Szene,
+      {
+        Höhe: lintTexthöhe + Text.Unten + Text.Oben,
+        Breite: 1920,
+        x: 0,
+        y: (1080 - lintTexthöhe - Text.Unten - Text.Oben)
+      }
+    )
+  },
+  async Perspektive (Szene, Aktive, Inaktive) {
+    this.Sichtbarkeit(Szene, Aktive.Kamera, true)
+    Aktive.Mikros.forEach(lstrMikro => {
+      this.Sichtbarkeit(Szene, lstrMikro, true)
+    })
+    Aktive.Quellen.forEach(lstrQuelle => {
+      this.Sichtbarkeit(Szene, lstrQuelle, true)
+    })
+    this.Sichtbarkeit(Szene, Inaktive.Kamera, false)
+    Inaktive.Mikros.forEach(lstrMikro => {
+      this.Sichtbarkeit(Szene, lstrMikro, false)
+    })
+    Inaktive.Quellen.forEach(lstrQuelle => {
+      this.Sichtbarkeit(Szene, lstrQuelle, false)
+    })
+  },
+  Anmeldedaten () {
+    return gobjProgramm
+  },
+  async gestartet () {
+    await this.pruefe_Verbindung()
+    return gobsIstVerbunden
+  },
+  async Quellen_laden () {
+    if (!gobsIstVerbunden) {
+      gobjQuellen = []
+      const lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(gobjProgramm.Optionen, 'basic', 'scenes', gobjProgramm.Standardszenensammlung + '.json'), 'utf-8'))
+      lobjDaten.sources.forEach(lobjQuelle => {
+        gobjQuellen.push(lobjQuelle.name)
+      })
+      return gobjQuellen
+    }
+    gobjQuellen = []
+    if (gobjQuellen === undefined) {
+      gobjQuellen = []
+    }
+    if (Object.keys(gobjQuellen).length === 0) {
+      this.pruefe_Verbindung()
+      const lobjData = await gobjOBS.send('GetSourcesList')
+      lobjData.sources.forEach(lobjQuelle => {
+        gobjQuellen.push(lobjQuelle.name)
+      })
+    }
+  },
+  async Szenen_laden () {
+    if (!gobsIstVerbunden) {
+      garrSzenen = []
+      const lobjDaten = JSON.parse(gmodDS.readFileSync(gmodPfad.join(gobjProgramm.Optionen, 'basic', 'scenes', gobjProgramm.Standardszenensammlung + '.json'), 'utf-8'))
+      lobjDaten.scene_order.forEach(lobjSzene => {
+        garrSzenen.push(lobjSzene.name)
+      })
+    }
+    if (garrSzenen.length === 0) {
+      this.pruefe_Verbindung()
+      garrSzenen = []
+      const lobjData = await gobjOBS.send('GetSceneList')
+      lobjData.scenes.forEach(lobjSzene => {
+        garrSzenen.push(lobjSzene.name)
+      })
+    }
+  },
+  Szenen (Filterparameter = '') {
+    if (Filterparameter !== '') {
+      // return this.filtere_quellen(Filterparameter)
+    } else {
+      return garrSzenen
+    }
+  },
+  Quellen (Filterparameter = '') {
+    if (Filterparameter !== '') {
+      return this.filtere_quellen(Filterparameter)
+    } else {
+      return gobjQuellen
+    }
+  },
+  filter_Dialog (vueInstanz) {
+    vueInstanz.$q.dialog({
+      title: 'Filtern',
+      message: 'Bitte die zu filternden Einträge wählen:',
+      options: {
+        type: 'checkbox',
+        model: [],
+        // inline: true
+        items: this.optionen.filter
+      },
+      cancel: true,
+      persistent: true
+    }).onOk(daten => {
+      this.filtern(daten)
+    })
+  },
+  filtere_Quellen (Filterparameter) {
+    const larrWerte = []
+    for (let lintZaehler = 0; lintZaehler < gobjQuellen.length; lintZaehler++) {
+      if (Filterparameter.length === 0) {
+        larrWerte.push(gobjQuellen[lintZaehler].name)
+      } else {
+        if (Filterparameter.includes(gobjQuellen[lintZaehler].typeId)) {
+          larrWerte.push(gobjQuellen[lintZaehler].name)
+        }
+      }
+    }
+    return larrWerte
+  },
+  async Stream (Was) {
+    switch (Was) {
+      case 'starten':
+        await gobjOBS.send('StartStreaming', {})
+        break
+      case 'beenden':
+        await gobjOBS.send('StopStreaming', {})
+    }
+  },
+  MikroKamera (Aktive, Alle, Szene, Live) {
+    if (typeof (Aktive) === 'string') {
+      this.Sichtbarkeit(Szene, Aktive, true)
+      Alle.forEach(lstrElement => {
+        if (lstrElement !== Aktive) {
+          this.Sichtbarkeit(Szene, lstrElement, false)
+        }
+      })
+    } else {
+      Aktive.forEach(lstrElement => {
+        this.Sichtbarkeit(Szene, lstrElement, true)
+      })
+      Alle.forEach(lstrElement => {
+        if (Aktive.indexOf(lstrElement) === -1) {
+          this.Sichtbarkeit(Szene, lstrElement, false)
+        }
+      })
+    }
+    if (Live) {
+      this.Szene_anzeigen(Szene)
+    } else {
+      this.Szene_Vorschau(Szene)
+    }
+  }
+}
